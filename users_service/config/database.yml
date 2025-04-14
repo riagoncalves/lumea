@@ -15,14 +15,14 @@
 default: &default
   adapter: postgresql
   encoding: unicode
-  # For details on connection pooling, see Rails configuration guide
-  # https://guides.rubyonrails.org/configuring.html#database-pooling
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 20 } %>
+  url: <%= ENV.fetch("DATABASE_URL") %>
+  reaping_frequency: <%= ENV["DATABASE_REAP_FREQ"] || 10 %>
 
 
 development:
   <<: *default
-  database: users_service_development
+  url: <%= ENV.fetch("DATABASE_URL") %>
 
   # The specified database role being used to connect to PostgreSQL.
   # To create additional roles in PostgreSQL see `$ createuser --help`.
@@ -81,18 +81,18 @@ test:
 production:
   primary: &primary_production
     <<: *default
-    database: users_service_production
+    database: thesis_users_service
     username: users_service
     password: <%= ENV["USERS_SERVICE_DATABASE_PASSWORD"] %>
   cache:
     <<: *primary_production
-    database: users_service_production_cache
+    database: thesis_users_service_cache
     migrations_paths: db/cache_migrate
   queue:
     <<: *primary_production
-    database: users_service_production_queue
+    database: thesis_users_service_queue
     migrations_paths: db/queue_migrate
   cable:
     <<: *primary_production
-    database: users_service_production_cable
+    database: thesis_users_service_cable
     migrations_paths: db/cable_migrate
