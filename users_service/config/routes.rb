@@ -13,5 +13,11 @@ Rails.application.routes.draw do
       post "login", to: "sessions#create", as: :login
       post "register", to: "registrations#create", as: :register
     end
+
+    scope :users do
+      get "me", to: "users#show", as: :me
+      put "me", to: "users#update", as: :update_me
+      put "me/password", to: "users#update_password", as: :update_password
+    end
   end
 end
