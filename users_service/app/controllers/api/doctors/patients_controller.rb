@@ -33,7 +33,7 @@ module Api
       end
   
       def patient_params
-        params.require(:patient).permit(:email)
+        params.require(:patient)
       end
     end
   end
