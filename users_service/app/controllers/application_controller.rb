@@ -3,6 +3,12 @@ class ApplicationController < ActionController::API
 
   private
 
+  def require_doctor!
+    return if current_user&.doctor?
+
+    render status: :unauthorized, json: { error: 'Unauthorized' }
+  end
+
   def authenticate_user!
     token = request.headers['Authorization']
     raise ::AuthenticateTokenError, 'Unauthorized' if token.blank?

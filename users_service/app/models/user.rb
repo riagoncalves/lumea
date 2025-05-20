@@ -10,4 +10,8 @@ class User < ApplicationRecord
       ENV.fetch('JWT_SECRET_KEY', nil)
     )
   end
+
+  def doctor?
+    type.eql?('Doctor')
+  end
 end

@@ -1,6 +1,5 @@
 module Api
   class UsersController < ApplicationController
-
     def show
       render(status: :ok,
                  json: current_user,

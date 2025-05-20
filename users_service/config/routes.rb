@@ -19,5 +19,10 @@ Rails.application.routes.draw do
       put "me", to: "users#update", as: :update_me
       put "me/password", to: "users#update_password", as: :update_password
     end
+
+    scope :doctors, module: :doctors do
+      get 'patients/:id', to: 'patients#show', as: :doctor_patient
+      put 'patients/:id', to: 'patients#update', as: :update_doctor_patient
+    end
   end
 end
