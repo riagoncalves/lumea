@@ -1,3 +1,3 @@
 class UserSerializer < ApplicationSerializer
-  attributes :id, :email, :created_at, :updated_at
+  attributes :id, :email, :type, :created_at, :updated_at
 end

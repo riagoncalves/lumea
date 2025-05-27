@@ -24,5 +24,11 @@ Rails.application.routes.draw do
       get 'patients/:id', to: 'patients#show', as: :doctor_patient
       put 'patients/:id', to: 'patients#update', as: :update_doctor_patient
     end
+
+    scope :external_services, module: :external_services do
+      scope :users do
+        get ':id', to: 'users#show'
+      end
+    end
   end
 end

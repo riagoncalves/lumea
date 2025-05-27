@@ -9,20 +9,13 @@ Rails.application.routes.draw do
   # root "posts#index"
   
   scope :api, as: :api, module: :api do
-    scope :auth, module: :auth do
-      post "login", to: "sessions#create", as: :login
-      post "register", to: "registrations#create", as: :register
-    end
-
-    scope :users do
-      get "me", to: "users#show", as: :me
-      put "me", to: "users#update", as: :update_me
-      put "me/password", to: "users#update_password", as: :update_password
-    end
-
-    scope :doctors, module: :doctors do
-      get 'patients/:id', to: 'patients#show', as: :doctor_patient
-      put 'patients/:id', to: 'patients#update', as: :update_doctor_patient
+    scope :appointments do
+      get '/', to: "appointments#index", as: :appointments
+      post "create", to: "appointments#create", as: :create_appointment
+      get ":id", to: "appointments#show", as: :appointment
+      put ":id", to: "appointments#update", as: :update_appointment
+      put ":id/complete", to: "appointments#complete", as: :complete_appointment
+      delete ":id/cancel", to: "appointments#destroy", as: :delete_appointment
     end
   end
 end

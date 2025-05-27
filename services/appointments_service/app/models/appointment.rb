@@ -1,16 +1,19 @@
 class Appointment < ApplicationRecord
-  validates :start_time, presence: true
-  validates :status, presence: true
-  validates :doctor_id, presence: true
-  validates :patient_id, presence: true
+  scope :upcoming, -> { where('start_time >= ?', Time.current).order(:start_time) }
+  scope :past, -> { where('start_time < ?', Time.current).order(start_time: :desc) }
 
-  enum status: {
+  enum :status, {
     pending: 'pending',
     completed: 'completed',
     cancelled: 'cancelled',
     missed: 'missed'
   }
 
-  scope :upcoming, -> { where('start_time >= ?', Time.current).order(:start_time) }
-  scope :past, -> { where('start_time < ?', Time.current).order(start_time: :desc) }
+  def mark_as_completed
+    update(status: :completed)
+  end
+
+  def destroy
+    update(status: :cancelled)
+  end
 end
