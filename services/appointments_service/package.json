@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "prepare": "bundle i",
-    "dev": "rails s"
+    "dev": "foreman start -f Procfile.dev"
   },
   "keywords": []
 }
