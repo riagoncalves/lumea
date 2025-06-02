@@ -9,12 +9,19 @@ Rails.application.routes.draw do
   # root "posts#index"
   
   scope :api, as: :api, module: :api do
-    get 'patient_details', to: 'patient_details#show', as: :patient_details
-    put 'patient_details/update', to: 'patient_details#update', as: :update_patient_details
+    scope :patients, as: :patient, module: :patients do
+      get 'patient_details', to: 'patient_details#show', as: :patient_details
+      put 'patient_details/update', to: 'patient_details#update', as: :update_patient_details
+    end
 
     scope :doctors, as: :doctor, module: :doctors do
       get 'patient_details/:id', to: 'patient_details#show', as: :patient_details
       put 'patient_details/:id/update', to: 'patient_details#update', as: :update_patient_details
+
+      get 'diagnoses/:id', to: 'diagnoses#index', as: :diagnoses
+      get 'diagnoses/:id/:diagnose_id', to: 'diagnoses#show', as: :diagnosis
+      post 'diagnoses/:id/create', to: 'diagnoses#create', as: :create_diagnosis
+      put 'diagnoses/:id/:diagnose_id/update', to: 'diagnoses#update', as: :update_diagnosis
     end
   end
 end

@@ -1,4 +1,4 @@
-class ErrorSerializer < ActiveModel::Serializer
+class ErrorSerializer < ApplicationSerializer
   attributes :errors
 
   def errors
