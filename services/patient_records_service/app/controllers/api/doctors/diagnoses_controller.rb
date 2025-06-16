@@ -28,13 +28,47 @@ module Api
       end
 
       def create
-        
+        if diagnose_create_service.call
+          render(status: :created,
+                 json: diagnose_create_service.diagnose,
+                 serializer: ::DiagnoseSerializer,
+                 root: :diagnose,
+                 adapter: :json)
+        else
+          render(status: :unprocessable_entity, json: { errors: diagnose_create_service.errors.full_messages })
+        end
       end
 
       def update
+        if diagnose.nil?
+          render(status: :not_found, json: { errors: ['Diagnose not found'] })
+        elsif diagnose_update_service.call
+          render(status: :ok,
+                 json: diagnose_update_service.diagnose,
+                 serializer: ::DiagnoseSerializer,
+                 root: :diagnose,
+                 adapter: :json)
+        else
+          render(status: :unprocessable_entity, json: { errors: diagnose_update_service.errors.full_messages })
+        end
       end
 
       private
+
+      def diagnose_create_service
+        @diagnose_create_service ||= Diagnoses::Create.new(diagnose_create_params)
+      end
+
+      def diagnose_update_service
+        @diagnose_update_service ||= Diagnoses::Update.new(diagnose_update_params)
+      end
+
+      def diagnose_create_params
+        diagnose_params.merge(
+          patient_id: @patient.id,
+          doctor_id: current_user.id
+        )
+      end
 
       def diagnoses
         @diagnoses ||= Diagnose.where(patient_id: @patient.id)
@@ -45,7 +79,13 @@ module Api
       end
 
       def diagnose_params
-        params.require(:diagnose).permit(:appointment_id, :doctor_id, :diagnosis_code, :diagnosed_at, documents: [])
+        params.require(:diagnose).permit(:appointment_id, :diagnosis_code, :diagnosed_at, documents: [])
+      end
+
+      def diagnose_update_params
+        params.require(:diagnose).permit(:diagnosis_code, :diagnosed_at, :description, documents: []).merge(
+          diagnose: diagnose
+        )
       end
     end
   end
