@@ -16,6 +16,8 @@ Rails.application.routes.draw do
       get 'diagnoses', to: 'diagnoses#index', as: :diagnoses
 
       get 'prescriptions', to: 'prescriptions#index', as: :prescriptions
+
+      get 'session_notes', to: 'session_notes#index', as: :session_notes
     end
 
     scope :doctors, as: :doctor, module: :doctors do
@@ -31,6 +33,11 @@ Rails.application.routes.draw do
       get 'prescriptions/:id/:prescription_id', to: 'prescriptions#show', as: :prescription
       post 'prescriptions/:id/create', to: 'prescriptions#create', as: :create_prescription
       put 'prescriptions/:id/:prescription_id/update', to: 'prescriptions#update', as: :update_prescription
+
+      get 'session_notes/:id', to: 'session_notes#index', as: :session_notes
+      get 'session_notes/:id/:session_note_id', to: 'session_notes#show', as: :session_note
+      post 'session_notes/:id/create', to: 'session_notes#create', as: :create_session_note
+      put 'session_notes/:id/:session_note_id/update', to: 'session_notes#update', as: :update_session_note
     end
   end
 end
