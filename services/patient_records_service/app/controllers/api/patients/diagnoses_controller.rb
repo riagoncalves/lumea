@@ -12,7 +12,7 @@ module Api
       private
 
       def diagnoses
-        @diagnoses ||= current_user.diagnoses
+        @diagnoses ||= Diagnose.where(patient_id: current_user.id)
       end
     end
   end

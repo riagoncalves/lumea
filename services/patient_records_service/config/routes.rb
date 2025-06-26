@@ -14,6 +14,8 @@ Rails.application.routes.draw do
       put 'patient_details/update', to: 'patient_details#update', as: :update_patient_details
 
       get 'diagnoses', to: 'diagnoses#index', as: :diagnoses
+
+      get 'prescriptions', to: 'prescriptions#index', as: :prescriptions
     end
 
     scope :doctors, as: :doctor, module: :doctors do
@@ -24,6 +26,11 @@ Rails.application.routes.draw do
       get 'diagnoses/:id/:diagnose_id', to: 'diagnoses#show', as: :diagnosis
       post 'diagnoses/:id/create', to: 'diagnoses#create', as: :create_diagnosis
       put 'diagnoses/:id/:diagnose_id/update', to: 'diagnoses#update', as: :update_diagnosis
+
+      get 'prescriptions/:id', to: 'prescriptions#index', as: :prescriptions
+      get 'prescriptions/:id/:prescription_id', to: 'prescriptions#show', as: :prescription
+      post 'prescriptions/:id/create', to: 'prescriptions#create', as: :create_prescription
+      put 'prescriptions/:id/:prescription_id/update', to: 'prescriptions#update', as: :update_prescription
     end
   end
 end
