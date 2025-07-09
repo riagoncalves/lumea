@@ -9,6 +9,6 @@ Rails.application.routes.draw do
   # root "posts#index"
   
   scope :api, as: :api, module: :api do
-
+    post "audit_logs", to: "audit_logs#create", as: :audit_logs
   end
 end
