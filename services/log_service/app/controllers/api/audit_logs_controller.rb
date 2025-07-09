@@ -1,5 +1,7 @@
 module Api
   class AuditLogsController < ApplicationController
+    before_action :app_authentication!
+
     def create
       @audit_log = AuditLog.new(audit_log_params)
 
