@@ -104,6 +104,9 @@ module Api
       else
         @protected_appointment = Appointment.find_by(id: params[:id], patient_id: current_user.id)
       end
+
+      set_log_attributes(record: @protected_appointment)
+      @protected_appointment
     end
 
     def appointments

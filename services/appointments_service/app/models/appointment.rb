@@ -1,4 +1,6 @@
 class Appointment < ApplicationRecord
+  include Loggable
+
   scope :upcoming, -> { where('start_time >= ?', Time.current).order(:start_time) }
   scope :past, -> { where('start_time < ?', Time.current).order(start_time: :desc) }
 

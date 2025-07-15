@@ -6,7 +6,7 @@ module Api
       @audit_log = AuditLog.new(audit_log_params)
 
       if @audit_log.save
-        header :created
+        head :created
       else
         render json: @audit_log.errors, status: :unprocessable_entity
       end

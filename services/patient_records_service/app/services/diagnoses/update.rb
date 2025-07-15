@@ -31,7 +31,9 @@ module Diagnoses
       @diagnose ||= diagnose.update(
         diagnosis_code: diagnosis_code,
         diagnosed_at: diagnosed_at,
-        description: description
+        description: description,
+        whodunnit: diagnose.doctor_id,
+        old_values: diagnose.attributes
       )
     end
 
@@ -41,7 +43,9 @@ module Diagnoses
 
       documents.each do |doc|
         @diagnose.documents.create!(
-          file_base64: doc
+          file_base64: doc,
+          whodunnit: diagnose.doctor_id,
+          old_values: {}
         )
       end
 

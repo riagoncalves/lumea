@@ -9,7 +9,9 @@ module Appointments
       appointment.update(
         doctor_id: doctor_id,
         start_time: start_time,
-        end_time: end_time
+        end_time: end_time,
+        whodunnit: patient_id,
+        old_values: appointment.attributes
       )
     end
 

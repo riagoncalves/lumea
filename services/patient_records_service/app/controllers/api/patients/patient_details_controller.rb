@@ -28,7 +28,12 @@ module Api
       private
 
       def patient_detail
-        @patient_detail ||= PatientDetail.find_or_initialize_by(patient_id: current_user.id)
+        return @patient_detail if defined?(@patient_detail)
+
+        @patient_detail = PatientDetail.find_or_initialize_by(patient_id: current_user.id)
+
+        set_log_attributes(record: @patient_detail)
+        @patient_detail
       end
 
       def patient_detail_params

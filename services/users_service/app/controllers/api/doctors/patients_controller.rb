@@ -27,7 +27,12 @@ module Api
       private
   
       def patient
-        @patient ||= Patient.find(params[:id])
+        return @patient if defined?(@patient)
+
+        @patient = Patient.find(params[:id])
+        set_log_attributes(record: @patient)
+
+        @patient
       rescue ActiveRecord::RecordNotFound
         render(status: :not_found, json: { errors: ['Patient not found'] })
       end

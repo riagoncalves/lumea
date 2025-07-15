@@ -67,7 +67,9 @@ module Api
       def session_note_create_params
         session_note_params.merge(
           patient_id: @patient.id,
-          doctor_id: current_user.id
+          doctor_id: current_user.id,
+          whodunnit: current_user.id,
+          old_values: {}
         )
       end
 
@@ -76,7 +78,12 @@ module Api
       end
 
       def session_note
-        @session_note ||= SessionNote.find_by(id: params[:session_note_id], patient_id: @patient.id)
+        return @session_note if defined?(@session_note)
+
+        @session_note = SessionNote.find_by(id: params[:session_note_id], patient_id: @patient.id)
+
+        set_log_attributes(record: @session_note)
+        @session_note
       end
 
       def session_note_params

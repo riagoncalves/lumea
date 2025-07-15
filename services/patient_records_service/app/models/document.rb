@@ -1,4 +1,6 @@
 class Document < ApplicationRecord
+  include Loggable
+
   belongs_to :documentable, polymorphic: true
 
   mount_uploader :file, DocumentUploader

@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::API
   before_action :authenticate_user!
+  before_action :set_log_attributes
 
   private
 
@@ -52,5 +53,13 @@ class ApplicationController < ActionController::API
 
   def current_user
     @current_user
+  end
+
+  def set_log_attributes(record: nil)
+    target_record = record || current_user
+    return unless target_record.present?
+
+    target_record.whodunnit = current_user&.id
+    target_record.old_values = target_record.attributes
   end
 end

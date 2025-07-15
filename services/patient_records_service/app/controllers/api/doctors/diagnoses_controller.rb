@@ -75,7 +75,11 @@ module Api
       end
 
       def diagnose
-        @diagnose ||= Diagnose.find_by(id: params[:diagnose_id], patient_id: @patient.id)
+        return @diagnose if defined?(@diagnose)
+
+        @diagnose = Diagnose.find_by(id: params[:diagnose_id], patient_id: @patient.id)
+        set_log_attributes(record: @diagnose)
+        @diagnose
       end
 
       def diagnose_params

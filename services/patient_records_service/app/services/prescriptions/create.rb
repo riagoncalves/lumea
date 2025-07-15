@@ -44,7 +44,9 @@ module Prescriptions
         frequency: frequency,
         start_date: start_date,
         end_date: end_date,
-        notes: notes
+        notes: notes,
+        old_values: {},
+        whodunnit: doctor_id
       )
     end
 
@@ -54,7 +56,9 @@ module Prescriptions
 
       documents.each do |doc|
         @prescription.documents.create!(
-          file_base64: doc
+          file_base64: doc,
+          whodunnit: doctor_id,
+          old_values: {}
         )
       end
 
