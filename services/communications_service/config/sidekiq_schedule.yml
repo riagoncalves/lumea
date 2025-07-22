@@ -1,0 +1,5 @@
+mark_missed_appointments:
+  cron: "*/10 * * * *"   # every 10 minutes
+  class: "MarkMissedAppointmentsJob"
+  queue: default
+  

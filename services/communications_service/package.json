@@ -1,0 +1,10 @@
+{
+  "name": "communications_service",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "prepare": "bundle i",
+    "dev": "foreman start -f Procfile.dev"
+  },
+  "keywords": []
+}
