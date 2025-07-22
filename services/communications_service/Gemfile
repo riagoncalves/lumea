@@ -38,10 +38,6 @@ gem "thruster", require: false
 # env vars
 gem "dotenv-rails"
 
-# auth
-gem "devise"
-gem "devise-jwt"
-
 # Serialization
 gem 'active_model_serializers'
 
@@ -50,6 +46,8 @@ gem "valid_email2"
 
 gem 'sidekick'
 gem 'sidekiq-cron'
+
+gem 'sendgrid-ruby', '~> 6.7'
 
 
 group :development, :test do
