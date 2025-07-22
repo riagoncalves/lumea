@@ -3,7 +3,9 @@ module Api
 
     def create
       if communication_params[:communication_type].eql?('email')
-        PatientMailerJob.perform_async(communication_params)
+        email = communication_params[:email]
+        template = communication_params[:template]
+        PatientMailerJob.perform_async(email:, template:)
         head :accepted
       end
     end
