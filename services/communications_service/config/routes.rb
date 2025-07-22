@@ -9,13 +9,8 @@ Rails.application.routes.draw do
   # root "posts#index"
   
   scope :api, as: :api, module: :api do
-    scope :appointments do
-      get '/', to: "appointments#index", as: :appointments
-      post "create", to: "appointments#create", as: :create_appointment
-      get ":id", to: "appointments#show", as: :appointment
-      put ":id", to: "appointments#update", as: :update_appointment
-      put ":id/complete", to: "appointments#complete", as: :complete_appointment
-      delete ":id/cancel", to: "appointments#destroy", as: :delete_appointment
+    scope :communications do
+      resources :communications, only: [:create]
     end
   end
 end
