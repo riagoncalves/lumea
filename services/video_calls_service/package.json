@@ -1,0 +1,10 @@
+{
+  "name": "patient_records_service",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "prepare": "bundle i",
+    "dev": "rails s"
+  },
+  "keywords": []
+}
