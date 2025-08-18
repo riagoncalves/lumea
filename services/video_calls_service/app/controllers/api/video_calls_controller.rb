@@ -33,6 +33,10 @@ module Api
     def video_call
     end
 
+    def video_call_create_params
+      params.require(:video_call).permit(:doctor_id, :patient_id)
+    end
+
     def generate_video_token(identity, room_sid)
       # Setup token
       token = Twilio::JWT::AccessToken.new(
