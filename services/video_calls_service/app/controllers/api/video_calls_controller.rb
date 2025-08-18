@@ -50,5 +50,18 @@ module Api
       # Return the signed JWT
       token.to_jwt
     end
+
+    def find_or_create_room(name)
+      # Try to fetch an existing room with this name
+      existing = TwilioClient.video.rooms.list(unique_name: name)&.first
+      return existing if existing.present?
+
+      # Otherwise create the room
+      TwilioClient.video.rooms.create(
+        unique_name: name,
+        type: 'group',          # or 'group-small', 'go', etc
+        record_participants_on_connect: false
+      )
+    end
   end
 end
