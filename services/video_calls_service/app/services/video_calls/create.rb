@@ -23,7 +23,7 @@ module VideoCalls
       TwilioClient.video.rooms.create(
         unique_name: room_name,
         type: 'group',
-        status_callback: Rails.application.routes.url_helpers.twilio_webhook_url,
+        status_callback: Rails.application.routes.url_helpers.api_twilio_webhook_url,
         status_callback_events: %w[
           room-created
           participant-connected
