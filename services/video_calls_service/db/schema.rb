@@ -18,6 +18,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_18_230549) do
     t.string "name"
     t.string "room_sid"
     t.string "status"
+    t.string "access_token"
     t.bigint "doctor_id", null: false
     t.bigint "patient_id", null: false
     t.datetime "created_at", null: false

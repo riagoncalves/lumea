@@ -9,5 +9,7 @@ Rails.application.routes.draw do
   # root "posts#index"
   
   scope :api, as: :api, module: :api do
+    resources :video_calls, only: [:create, :show], controller: 'video_calls'
+    post 'twilio/webhook', to: 'twilio#webhook', as: :twilio_webhook
   end
 end
