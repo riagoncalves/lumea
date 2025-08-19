@@ -1,0 +1,31 @@
+# Common Ruby styling rules for the monorepo
+inherit_gem: { rubocop-rails-omakase: rubocop.yml }
+
+# Common overrides for all services
+Style/Documentation:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Metrics/MethodLength:
+  Max: 20
+
+Metrics/BlockLength:
+  Exclude:
+    - 'config/routes.rb'
+    - 'spec/**/*.rb'
+    - 'db/schema.rb'
+
+AllCops:
+  NewCops: enable
+  TargetRubyVersion: 3.2
+  Exclude:
+    - 'db/schema.rb'
+    - 'bin/**/*'
+    - 'tmp/**/*'
+    - 'vendor/**/*'
+    - 'node_modules/**/*'
+    - 'config/cable_schema.rb'
+    - 'config/cache_schema.rb'
+    - 'config/queue_schema.rb'

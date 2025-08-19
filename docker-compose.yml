@@ -1,0 +1,127 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:14
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  appointments:
+    build:
+      context: ./services/appointments_service
+      dockerfile: Dockerfile
+    depends_on:
+      - postgres
+      - redis
+    ports:
+      - "3001:3000"
+    volumes:
+      - ./services/appointments_service:/app
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/appointments_development
+      REDIS_URL: redis://redis:6379/0
+      RAILS_ENV: development
+      RAILS_LOG_TO_STDOUT: 'true'
+
+  communications:
+    build:
+      context: ./services/communications_service
+      dockerfile: Dockerfile
+    depends_on:
+      - postgres
+      - redis
+    ports:
+      - "3002:3000"
+    volumes:
+      - ./services/communications_service:/app
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/communications_development
+      REDIS_URL: redis://redis:6379/1
+      RAILS_ENV: development
+      RAILS_LOG_TO_STDOUT: 'true'
+
+  log:
+    build:
+      context: ./services/log_service
+      dockerfile: Dockerfile
+    depends_on:
+      - postgres
+      - redis
+    ports:
+      - "3003:3000"
+    volumes:
+      - ./services/log_service:/app
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/log_development
+      REDIS_URL: redis://redis:6379/2
+      RAILS_ENV: development
+      RAILS_LOG_TO_STDOUT: 'true'
+
+  patient_records:
+    build:
+      context: ./services/patient_records_service
+      dockerfile: Dockerfile
+    depends_on:
+      - postgres
+      - redis
+    ports:
+      - "3004:3000"
+    volumes:
+      - ./services/patient_records_service:/app
+      - patient_uploads:/app/public/uploads
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/patient_records_development
+      REDIS_URL: redis://redis:6379/3
+      RAILS_ENV: development
+      RAILS_LOG_TO_STDOUT: 'true'
+
+  users:
+    build:
+      context: ./services/users_service
+      dockerfile: Dockerfile
+    depends_on:
+      - postgres
+      - redis
+    ports:
+      - "3005:3000"
+    volumes:
+      - ./services/users_service:/app
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/users_development
+      REDIS_URL: redis://redis:6379/4
+      RAILS_ENV: development
+      RAILS_LOG_TO_STDOUT: 'true'
+
+  video_calls:
+    build:
+      context: ./services/video_calls_service
+      dockerfile: Dockerfile
+    depends_on:
+      - postgres
+      - redis
+    ports:
+      - "3006:3000"
+    volumes:
+      - ./services/video_calls_service:/app
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/video_calls_development
+      REDIS_URL: redis://redis:6379/5
+      RAILS_ENV: development
+      RAILS_LOG_TO_STDOUT: 'true'
+
+volumes:
+  postgres_data:
+  redis_data:
+  patient_uploads:

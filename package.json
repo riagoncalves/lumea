@@ -1,11 +1,21 @@
 {
   "name": "thesis",
   "version": "1.0.0",
-  "description": "",
+  "description": "Medical appointment management system",
   "scripts": {
     "dev": "pnpm -r run dev",
-    "prepare": "pnpm -r run prepare"
+    "prepare": "pnpm -r run prepare",
+    "lint": "pnpm -r exec bundle exec rubocop",
+    "lint:fix": "pnpm -r exec bundle exec rubocop -a",
+    "test": "pnpm -r exec bundle exec rails test",
+    "db:create": "pnpm -r exec bundle exec rails db:create",
+    "db:migrate": "pnpm -r exec bundle exec rails db:migrate",
+    "db:reset": "pnpm -r exec bundle exec rails db:reset",
+    "db:seed": "pnpm -r exec bundle exec rails db:seed"
   },
-  "keywords": [],
-  "author": "riagoncalves.dev"
+  "keywords": ["healthcare", "telemedicine", "appointments"],
+  "author": "riagoncalves.dev",
+  "devDependencies": {
+    "foreman": "^3.0.1"
+  }
 }
