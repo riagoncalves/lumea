@@ -3,13 +3,16 @@ version: '3.8'
 services:
   postgres:
     image: postgres:14
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: postgres
       POSTGRES_USER: postgres
+      # Create all databases during initialization
+      POSTGRES_MULTIPLE_DATABASES: "appointments_development,communications_development,log_development,patient_records_development,users_development,video_calls_development,appointments_test,communications_test,log_test,patient_records_test,users_test,video_calls_test"
     ports:
       - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/postgres:/docker-entrypoint-initdb.d
 
   redis:
     image: redis:7
@@ -22,103 +25,224 @@ services:
     build:
       context: ./services/appointments_service
       dockerfile: Dockerfile
+    command: ./bin/rails server -b 0.0.0.0
     depends_on:
       - postgres
       - redis
     ports:
       - "3001:3000"
     volumes:
-      - ./services/appointments_service:/app
+      - ./services/appointments_service:/rails
     environment:
       DATABASE_URL: postgres://postgres:postgres@postgres:5432/appointments_development
       REDIS_URL: redis://redis:6379/0
       RAILS_ENV: development
+      BUNDLE_WITHOUT: ""
       RAILS_LOG_TO_STDOUT: 'true'
 
   communications:
     build:
       context: ./services/communications_service
       dockerfile: Dockerfile
+    command: ./bin/rails server -b 0.0.0.0
     depends_on:
       - postgres
       - redis
     ports:
       - "3002:3000"
     volumes:
-      - ./services/communications_service:/app
+      - ./services/communications_service:/rails
     environment:
       DATABASE_URL: postgres://postgres:postgres@postgres:5432/communications_development
       REDIS_URL: redis://redis:6379/1
       RAILS_ENV: development
+      BUNDLE_WITHOUT: ""
       RAILS_LOG_TO_STDOUT: 'true'
 
   log:
     build:
       context: ./services/log_service
       dockerfile: Dockerfile
+    command: ./bin/rails server -b 0.0.0.0
     depends_on:
       - postgres
       - redis
     ports:
       - "3003:3000"
     volumes:
-      - ./services/log_service:/app
+      - ./services/log_service:/rails
     environment:
       DATABASE_URL: postgres://postgres:postgres@postgres:5432/log_development
       REDIS_URL: redis://redis:6379/2
       RAILS_ENV: development
+      BUNDLE_WITHOUT: ""
       RAILS_LOG_TO_STDOUT: 'true'
 
   patient_records:
     build:
       context: ./services/patient_records_service
       dockerfile: Dockerfile
+    command: ./bin/rails server -b 0.0.0.0
     depends_on:
       - postgres
       - redis
     ports:
       - "3004:3000"
     volumes:
-      - ./services/patient_records_service:/app
-      - patient_uploads:/app/public/uploads
+      - ./services/patient_records_service:/rails
+      - patient_uploads:/rails/public/uploads
     environment:
       DATABASE_URL: postgres://postgres:postgres@postgres:5432/patient_records_development
       REDIS_URL: redis://redis:6379/3
       RAILS_ENV: development
+      BUNDLE_WITHOUT: ""
       RAILS_LOG_TO_STDOUT: 'true'
 
   users:
     build:
       context: ./services/users_service
       dockerfile: Dockerfile
+    command: ./bin/rails server -b 0.0.0.0
     depends_on:
       - postgres
       - redis
     ports:
       - "3005:3000"
     volumes:
-      - ./services/users_service:/app
+      - ./services/users_service:/rails
     environment:
       DATABASE_URL: postgres://postgres:postgres@postgres:5432/users_development
       REDIS_URL: redis://redis:6379/4
       RAILS_ENV: development
+      BUNDLE_WITHOUT: ""
       RAILS_LOG_TO_STDOUT: 'true'
 
   video_calls:
     build:
       context: ./services/video_calls_service
       dockerfile: Dockerfile
+    command: ./bin/rails server -b 0.0.0.0
     depends_on:
       - postgres
       - redis
     ports:
       - "3006:3000"
     volumes:
-      - ./services/video_calls_service:/app
+      - ./services/video_calls_service:/rails
     environment:
       DATABASE_URL: postgres://postgres:postgres@postgres:5432/video_calls_development
       REDIS_URL: redis://redis:6379/5
       RAILS_ENV: development
+      BUNDLE_WITHOUT: ""
+      RAILS_LOG_TO_STDOUT: 'true'
+
+  # Sidekiq workers for each service
+  appointments_worker:
+    build:
+      context: ./services/appointments_service
+      dockerfile: Dockerfile
+    command: bundle exec sidekiq
+    depends_on:
+      - postgres
+      - redis
+      - appointments
+    volumes:
+      - ./services/appointments_service:/rails
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/appointments_development
+      REDIS_URL: redis://redis:6379/0
+      RAILS_ENV: development
+      BUNDLE_WITHOUT: ""
+      RAILS_LOG_TO_STDOUT: 'true'
+
+  communications_worker:
+    build:
+      context: ./services/communications_service
+      dockerfile: Dockerfile
+    command: bundle exec sidekiq
+    depends_on:
+      - postgres
+      - redis
+      - communications
+    volumes:
+      - ./services/communications_service:/rails
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/communications_development
+      REDIS_URL: redis://redis:6379/1
+      RAILS_ENV: development
+      BUNDLE_WITHOUT: ""
+      RAILS_LOG_TO_STDOUT: 'true'
+
+  log_worker:
+    build:
+      context: ./services/log_service
+      dockerfile: Dockerfile
+    command: bundle exec sidekiq
+    depends_on:
+      - postgres
+      - redis
+      - log
+    volumes:
+      - ./services/log_service:/rails
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/log_development
+      REDIS_URL: redis://redis:6379/2
+      RAILS_ENV: development
+      BUNDLE_WITHOUT: ""
+      RAILS_LOG_TO_STDOUT: 'true'
+
+  patient_records_worker:
+    build:
+      context: ./services/patient_records_service
+      dockerfile: Dockerfile
+    command: bundle exec sidekiq
+    depends_on:
+      - postgres
+      - redis
+      - patient_records
+    volumes:
+      - ./services/patient_records_service:/rails
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/patient_records_development
+      REDIS_URL: redis://redis:6379/3
+      RAILS_ENV: development
+      BUNDLE_WITHOUT: ""
+      RAILS_LOG_TO_STDOUT: 'true'
+
+  users_worker:
+    build:
+      context: ./services/users_service
+      dockerfile: Dockerfile
+    command: bundle exec sidekiq
+    depends_on:
+      - postgres
+      - redis
+      - users
+    volumes:
+      - ./services/users_service:/rails
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/users_development
+      REDIS_URL: redis://redis:6379/4
+      RAILS_ENV: development
+      BUNDLE_WITHOUT: ""
+      RAILS_LOG_TO_STDOUT: 'true'
+
+  video_calls_worker:
+    build:
+      context: ./services/video_calls_service
+      dockerfile: Dockerfile
+    command: bundle exec sidekiq
+    depends_on:
+      - postgres
+      - redis
+      - video_calls
+    volumes:
+      - ./services/video_calls_service:/rails
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/video_calls_development
+      REDIS_URL: redis://redis:6379/5
+      RAILS_ENV: development
+      BUNDLE_WITHOUT: ""
       RAILS_LOG_TO_STDOUT: 'true'
 
 volumes:

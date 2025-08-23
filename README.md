@@ -26,11 +26,42 @@ A comprehensive medical appointment management system built as a microservices a
 
 - Ruby 3.2+
 - Node.js 18+
-- PostgreSQL 14+
-- Redis
+- Docker and Docker Compose (recommended)
+- PostgreSQL 14+ (if not using Docker)
+- Redis (if not using Docker)
 - PNPM
 
 ### Installation
+
+#### Option 1: Using Docker (Recommended)
+
+1. Clone the repository:
+   ```
+   git clone https://github.com/yourusername/thesis-monorepo.git
+   cd thesis-monorepo
+   ```
+
+2. Start the services with Docker Compose:
+   ```
+   docker-compose up -d
+   ```
+
+3. Run migrations and seeds for each service:
+   ```
+   docker-compose exec appointments rails db:migrate db:seed
+   docker-compose exec communications rails db:migrate db:seed
+   docker-compose exec log rails db:migrate db:seed
+   docker-compose exec patient_records rails db:migrate db:seed
+   docker-compose exec users rails db:migrate db:seed
+   docker-compose exec video_calls rails db:migrate db:seed
+   ```
+
+4. Check if services are running properly:
+   ```
+   ./check-services.sh
+   ```
+
+#### Option 2: Manual Setup
 
 1. Clone the repository:
    ```
@@ -62,6 +93,45 @@ To run a specific service:
 ```
 cd services/appointments_service
 pnpm dev
+```
+
+## Docker Commands
+
+### Starting services
+
+```
+# Start all services
+docker-compose up -d
+
+# Start specific services
+docker-compose up -d appointments communications
+
+# View logs
+docker-compose logs -f
+
+# Stop all services
+docker-compose down
+```
+
+### Accessing containers
+
+```
+# Access a service container
+docker-compose exec appointments bash
+
+# Run a Rails command
+docker-compose exec appointments rails console
+docker-compose exec users rails routes
+```
+
+### Rebuilding containers
+
+```
+# Rebuild a specific service after Gemfile changes
+docker-compose build appointments
+
+# Rebuild all services
+docker-compose build
 ```
 
 ## Testing
