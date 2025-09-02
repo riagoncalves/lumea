@@ -14,11 +14,27 @@ A comprehensive medical appointment management system built as a microservices a
 ## Tech Stack
 
 - Ruby on Rails 8.0 for API backends
-- PostgreSQL for databases
+- PostgreSQL for databases (separate instance per service)
 - Sidekiq for background job processing
 - JWT for authentication
 - Docker for containerization
 - PNPM workspaces for monorepo management
+
+## Database Architecture
+
+Each service has its own dedicated PostgreSQL container for complete data isolation:
+- **appointments_service**: localhost:5432 → appointments_development
+- **communications_service**: localhost:5433 → communications_development  
+- **log_service**: localhost:5434 → log_development
+- **patient_records_service**: localhost:5435 → patient_records_development
+- **users_service**: localhost:5436 → users_development
+- **video_calls_service**: localhost:5437 → video_calls_development
+
+This architecture ensures:
+- Complete data isolation between services
+- Independent scaling of databases
+- Service autonomy and resilience
+- Easier testing and development
 
 ## Development Setup
 
@@ -48,18 +64,33 @@ A comprehensive medical appointment management system built as a microservices a
 
 3. Run migrations and seeds for each service:
    ```
-   docker-compose exec appointments rails db:migrate db:seed
-   docker-compose exec communications rails db:migrate db:seed
-   docker-compose exec log rails db:migrate db:seed
-   docker-compose exec patient_records rails db:migrate db:seed
-   docker-compose exec users rails db:migrate db:seed
-   docker-compose exec video_calls rails db:migrate db:seed
+   ./docker.sh migrate
+   ./docker.sh seed
    ```
 
 4. Check if services are running properly:
    ```
-   ./check-services.sh
+   ./docker.sh status
    ```
+
+### Quick Docker Commands
+
+```bash
+# Start all services
+./docker.sh up
+
+# View logs
+./docker.sh logs
+
+# Access a service console
+./docker.sh console users
+
+# Stop all services
+./docker.sh down
+
+# Reset all data (careful!)
+./docker.sh reset
+```
 
 #### Option 2: Manual Setup
 
