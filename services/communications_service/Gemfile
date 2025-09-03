@@ -38,6 +38,10 @@ gem "thruster", require: false
 # env vars
 gem "dotenv-rails"
 
+# auth
+gem "devise"
+gem "devise-jwt"
+
 # Serialization
 gem 'active_model_serializers'
 

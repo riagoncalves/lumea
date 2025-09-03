@@ -35,8 +35,25 @@ RUN npm install
 # Copy application code
 COPY . .
 
+# Copy environment file
+COPY .env.docker.development .env
+
 # Create necessary directories
 RUN mkdir -p tmp/pids log storage
+
+# Create entrypoint script
+RUN echo '#!/bin/bash\n\
+set -e\n\
+\n\
+# Remove a potentially pre-existing server.pid for Rails.\n\
+rm -f /rails/tmp/pids/server.pid\n\
+\n\
+# Then exec the container'\''s main process (what'\''s set as CMD).\n\
+exec "$@"' > /rails/docker-entrypoint.sh && \
+chmod +x /rails/docker-entrypoint.sh
+
+# Set entrypoint
+ENTRYPOINT ["/rails/docker-entrypoint.sh"]
 
 # Expose port
 EXPOSE 3000

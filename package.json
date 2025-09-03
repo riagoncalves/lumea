@@ -12,11 +12,9 @@
     "db:migrate": "pnpm -r exec bundle exec rails db:migrate",
     "db:reset": "pnpm -r exec bundle exec rails db:reset",
     "db:seed": "pnpm -r exec bundle exec rails db:seed",
-    "docker:up": "docker-compose up -d",
-    "docker:down": "docker-compose down",
-    "docker:build": "docker-compose build",
-    "docker:logs": "docker-compose logs -f",
-    "docker:reset": "docker-compose down -v && docker-compose up -d"
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down",
+    "docker:build": "docker compose build"
   },
   "keywords": ["healthcare", "telemedicine", "appointments"],
   "author": "riagoncalves.dev",
