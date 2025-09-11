@@ -40,7 +40,7 @@ This architecture ensures:
 
 ### Prerequisites
 
-- Ruby 3.2+
+- Ruby 3.2.2
 - Node.js 18+
 - Docker and Docker Compose (recommended)
 - PostgreSQL 14+ (if not using Docker)
@@ -57,39 +57,27 @@ This architecture ensures:
    cd thesis-monorepo
    ```
 
-2. Start the services with Docker Compose:
+2. Build the services with Docker Compose:
    ```
-   docker-compose up -d
-   ```
-
-3. Run migrations and seeds for each service:
-   ```
-   ./docker.sh migrate
-   ./docker.sh seed
+   pnpm docker:build
    ```
 
-4. Check if services are running properly:
+3. Start the services with Docker Compose:
    ```
-   ./docker.sh status
+   pnpm docker:up
    ```
 
 ### Quick Docker Commands
 
 ```bash
+# Build all services
+pnpm docker:build
+
 # Start all services
-./docker.sh up
-
-# View logs
-./docker.sh logs
-
-# Access a service console
-./docker.sh console users
+pnpm docker:up
 
 # Stop all services
-./docker.sh down
-
-# Reset all data (careful!)
-./docker.sh reset
+pnpm docker:down
 ```
 
 #### Option 2: Manual Setup
@@ -144,35 +132,6 @@ docker-compose logs -f
 docker-compose down
 ```
 
-### Accessing containers
-
-```
-# Access a service container
-docker-compose exec appointments bash
-
-# Run a Rails command
-docker-compose exec appointments rails console
-docker-compose exec users rails routes
-```
-
-### Rebuilding containers
-
-```
-# Rebuild a specific service after Gemfile changes
-docker-compose build appointments
-
-# Rebuild all services
-docker-compose build
-```
-
-## Testing
-
-Run tests across all services:
-
-```
-pnpm test
-```
-
 ## Linting
 
 Run linters across all services:
@@ -187,25 +146,9 @@ Fix auto-correctable issues:
 pnpm lint:fix
 ```
 
-## Deployment
-
-Each service can be deployed independently using Kamal:
-
-```
-cd services/appointments_service
-bin/kamal deploy
-```
-
 ## Architecture Overview
 
 This monorepo is organized as a collection of microservices that communicate through RESTful APIs. Each service is responsible for a specific domain and can be deployed and scaled independently.
-
-## Contributing
-
-1. Create a feature branch
-2. Make your changes
-3. Ensure tests pass and code is linted
-4. Submit a pull request
 
 ## License
 
