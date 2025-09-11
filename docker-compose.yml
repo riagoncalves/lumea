@@ -74,121 +74,94 @@ services:
     volumes:
       - redis_data:/data
 
+  appointments_sidekiq:
+    build:
+      context: ./services/appointments_service
+      dockerfile: Dockerfile.dev
+    volumes:
+      - .:/appointments_sidekiq
+    command: bundle exec sidekiq -C config/sidekiq.yml
+    depends_on:
+      - appointments_db
+      - redis
+
+  communications_sidekiq:
+    build:
+      context: ./services/communications_service
+      dockerfile: Dockerfile.dev
+    volumes:
+      - .:/communications_sidekiq
+    command: bundle exec sidekiq -C config/sidekiq.yml
+    depends_on:
+      - communications_db
+      - redis
+
   # Application services
   appointments:
     build:
       context: ./services/appointments_service
       dockerfile: Dockerfile.dev
-    command: npm run dev
+    command: bundle exec rails server
     depends_on:
       - appointments_db
       - redis
     ports:
       - "3001:3000"
-    volumes:
-      - ./services/appointments_service:/rails
-    environment:
-      DATABASE_URL: postgres://postgres:postgres@appointments_db:5432/appointments_development
-      REDIS_URL: redis://redis:6379/0
-      RAILS_ENV: development
-      BUNDLE_WITHOUT: ""
-      RAILS_LOG_TO_STDOUT: 'true'
 
   communications:
     build:
       context: ./services/communications_service
       dockerfile: Dockerfile.dev
-    command: npm run dev
+    command: bundle exec rails server
     depends_on:
       - communications_db
       - redis
     ports:
       - "3002:3000"
-    volumes:
-      - ./services/communications_service:/rails
-    environment:
-      DATABASE_URL: postgres://postgres:postgres@communications_db:5432/communications_development
-      REDIS_URL: redis://redis:6379/1
-      RAILS_ENV: development
-      BUNDLE_WITHOUT: ""
-      RAILS_LOG_TO_STDOUT: 'true'
 
   log:
     build:
       context: ./services/log_service
       dockerfile: Dockerfile.dev
-    command: npm run dev
+    command: bundle exec rails server
     depends_on:
       - log_db
       - redis
     ports:
       - "3003:3000"
-    volumes:
-      - ./services/log_service:/rails
-    environment:
-      DATABASE_URL: postgres://postgres:postgres@log_db:5432/log_development
-      REDIS_URL: redis://redis:6379/2
-      RAILS_ENV: development
-      BUNDLE_WITHOUT: ""
-      RAILS_LOG_TO_STDOUT: 'true'
 
   patient_records:
     build:
       context: ./services/patient_records_service
       dockerfile: Dockerfile.dev
-    command: npm run dev
+    command: bundle exec rails server
     depends_on:
       - patient_records_db
       - redis
     ports:
       - "3004:3000"
-    volumes:
-      - ./services/patient_records_service:/rails
-      - patient_uploads:/rails/public/uploads
-    environment:
-      DATABASE_URL: postgres://postgres:postgres@patient_records_db:5432/patient_records_development
-      REDIS_URL: redis://redis:6379/3
-      RAILS_ENV: development
-      BUNDLE_WITHOUT: ""
-      RAILS_LOG_TO_STDOUT: 'true'
 
   users:
     build:
       context: ./services/users_service
       dockerfile: Dockerfile.dev
-    command: npm run dev
+    command: bundle exec rails server
     depends_on:
       - users_db
       - redis
     ports:
       - "3005:3000"
-    volumes:
-      - ./services/users_service:/rails
-    environment:
-      DATABASE_URL: postgres://postgres:postgres@users_db:5432/users_development
-      REDIS_URL: redis://redis:6379/4
-      RAILS_ENV: development
-      BUNDLE_WITHOUT: ""
-      RAILS_LOG_TO_STDOUT: 'true'
 
   video_calls:
     build:
       context: ./services/video_calls_service
       dockerfile: Dockerfile.dev
-    command: npm run dev
+    command: bundle exec rails server
     depends_on:
       - video_calls_db
       - redis
     ports:
       - "3006:3000"
-    volumes:
-      - ./services/video_calls_service:/rails
-    environment:
-      DATABASE_URL: postgres://postgres:postgres@video_calls_db:5432/video_calls_development
-      REDIS_URL: redis://redis:6379/5
-      RAILS_ENV: development
-      BUNDLE_WITHOUT: ""
-      RAILS_LOG_TO_STDOUT: 'true'
 
 volumes:
   appointments_postgres_data:
