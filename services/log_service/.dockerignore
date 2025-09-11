@@ -7,8 +7,9 @@
 # Ignore bundler config.
 /.bundle
 
-# Ignore all environment files.
+# Ignore all environment files except our Docker development env file.
 /.env*
+!/.env.docker.development
 
 # Ignore all default key files.
 /config/master.key

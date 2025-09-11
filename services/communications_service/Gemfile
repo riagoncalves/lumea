@@ -38,13 +38,17 @@ gem "thruster", require: false
 # env vars
 gem "dotenv-rails"
 
+# auth
+gem "devise"
+gem "devise-jwt"
+
 # Serialization
 gem 'active_model_serializers'
 
 # Email validator
 gem "valid_email2"
 
-gem 'sidekick'
+gem 'sidekiq'
 gem 'sidekiq-cron'
 
 gem 'sendgrid-ruby', '~> 6.7'
