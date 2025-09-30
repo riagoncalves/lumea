@@ -136,6 +136,7 @@ services:
       dockerfile: Dockerfile.dev
     command: bundle exec rails server
     depends_on:
+      - users
       - patient_records_db
       - redis
     ports:
@@ -162,6 +163,21 @@ services:
       - redis
     ports:
       - "3006:3000"
+
+  web:
+    build:
+      context: ./apps/web
+      dockerfile: Dockerfile.dev
+    command: bundle exec rails server
+    depends_on:
+      - appointments
+      - communications
+      - log
+      - patient_records
+      - users
+      - video_calls
+    ports:
+      - "3007:3000"
 
 volumes:
   appointments_postgres_data:
