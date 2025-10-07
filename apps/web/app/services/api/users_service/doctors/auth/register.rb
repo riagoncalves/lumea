@@ -8,6 +8,8 @@ module Api
           attribute :password_confirmation, :string
 
           def call
+            url = "#{SERVICE_URL}/doctors/auth/register"
+
             register_service.call(
               url:,
               email:,

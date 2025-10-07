@@ -8,25 +8,14 @@ module Api
           attribute :password_confirmation, :string
 
           def call
-            response = Faraday.post("#{SERVICE_URL}/patients/auth/register") do |req|
-              req.headers['Authorization'] = INTERNAL_API_SECRET
-              req.body = {
-                email: email,
-                password: password,
-                password_confirmation: password_confirmation
-              }
-            end
+            url = "#{SERVICE_URL}/patients/auth/register"
 
-            handle_response(response)
-          end
-
-          private
-
-          def handle_response(response)
-            return true if response.status.eql?(201)
-            
-            errors.add(:base, "Unexpected error: #{response.status} - #{response.body}")
-            false
+            register_service.call(
+              url:,
+              email:,
+              password:,
+              password_confirmation:
+            )
           end
         end
       end
