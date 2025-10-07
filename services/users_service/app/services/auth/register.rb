@@ -19,7 +19,7 @@ module Auth
     def call
       return false unless valid?
 
-      type.constantize.create(email: email, password: password)
+      type.titleize.constantize.create(email: email, password: password)
     end
 
     private
