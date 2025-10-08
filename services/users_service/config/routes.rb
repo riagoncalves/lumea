@@ -15,9 +15,9 @@ Rails.application.routes.draw do
       put "me/password", to: "users#update_password", as: :update_password
     end
 
-    scope :doctors, module: :doctors do
-      get 'patients/:id', to: 'patients#show', as: :doctor_patient
-      put 'patients/:id', to: 'patients#update', as: :update_doctor_patient
+    scope :doctors, as: :doctor, module: :doctors do
+      get 'patients/:id', to: 'patients#show', as: :patient
+      put 'patients/:id', to: 'patients#update', as: :update_patient
 
       scope :auth, module: :auth do
         post "login", to: "sessions#create", as: :login
@@ -25,7 +25,7 @@ Rails.application.routes.draw do
       end
     end
 
-    scope :patients, module: :patients do
+    scope :patients, as: :patient, module: :patients do
       scope :auth, module: :auth do
         post "login", to: "sessions#create", as: :login
         post "register", to: "registrations#create", as: :register
