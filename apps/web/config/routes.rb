@@ -11,4 +11,9 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+  
+  scope module: :public do
+    get "register", to: "registrations#new", as: :register
+    post "register", to: "registrations#create", as: :create_register
+  end
 end

@@ -13,9 +13,11 @@ module Api
           response = Faraday.post(url) do |req|
             req.headers['Authorization'] = INTERNAL_API_SECRET
             req.body = {
-              email:,
-              password:,
-              password_confirmation:
+              registration: {
+                email:,
+                password:,
+                password_confirmation:
+              }
             }
           end
 
@@ -27,7 +29,10 @@ module Api
         def handle_response(response)
           return true if response.status.eql?(201)
           
-          errors.add(:base, "Unexpected error: #{response.status} - #{response.body}")
+          response.body["errors"].each do |error|
+            errors.add(:base, error)
+          end
+
           false
         end
       end
