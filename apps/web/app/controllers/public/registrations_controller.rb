@@ -6,9 +6,8 @@ module Public
   
     def create
       if service.call
-        redirect_to root_path, notice: 'Registration successful.'
+        redirect_to login_path, notice: 'Registration successful.'
       else
-        puts service.errors.full_messages
         redirect_to register_path, alert: service.errors.full_messages.join('<br>')
       end
     end

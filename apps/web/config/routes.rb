@@ -15,5 +15,13 @@ Rails.application.routes.draw do
   scope module: :public do
     get "register", to: "registrations#new", as: :register
     post "register", to: "registrations#create", as: :create_register
+
+    get "login", to: "sessions#new", as: :login
+    post "login", to: "sessions#create", as: :create_login
+
+    scope :doctors, as: :doctor, module: :doctors do
+      get "register", to: "registrations#new", as: :register
+      post "register", to: "registrations#create", as: :create_register
+    end
   end
 end

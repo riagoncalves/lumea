@@ -12,8 +12,10 @@ module Api
           response = Faraday.post(url) do |req|
             req.headers['Authorization'] = INTERNAL_API_SECRET
             req.body = {
-              email:,
-              password:,
+              session: {
+                email:,
+                password:
+              }
             }
           end
 
@@ -23,10 +25,24 @@ module Api
         private
 
         def handle_response(response)
-          return true if response.status.eql?(201)
+          return handle_success(response) if response.status.eql?(200)
           
-          errors.add(:base, "Unexpected error: #{response.status} - #{response.body}")
+          response.body["errors"].each do |error|
+            errors.add(:base, error)
+          end
+
           false
+        end
+
+        def handle_success(response)
+          auth_token = response.body["auth_token"]
+          
+          cookies.signed[:auth_token] = {
+            value: auth_token,
+            httponly: true,
+            secure: Rails.env.production?,
+            expires: 7.days.from_now
+          }
         end
       end
     end

@@ -58,6 +58,7 @@ class ApplicationController < ActionController::API
   def set_log_attributes(record: nil)
     target_record = record || current_user
     return unless target_record.present?
+    return unless target_record.respond_to?(:whodunnit)
 
     target_record.whodunnit = current_user&.id
     target_record.old_values = target_record.attributes
