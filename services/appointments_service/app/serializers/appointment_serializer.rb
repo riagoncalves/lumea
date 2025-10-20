@@ -1,3 +1,3 @@
 class AppointmentSerializer < ApplicationSerializer
-  attributes :id, :status, :start_time, :end_time, :created_at, :updated_at
+  attributes :id, :status, :start_time, :end_time, :created_at, :updated_at, :doctor_id, :patient_id
 end

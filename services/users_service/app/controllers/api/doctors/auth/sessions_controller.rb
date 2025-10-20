@@ -7,7 +7,7 @@ module Api
   
         def create
           if user&.valid_password?(session_params[:password])
-            render json: { auth_token: user.auth_token }, status: :ok
+            render json: { auth_token: user.auth_token, type: 'doctor' }, status: :ok
           else
             render json: { errors: ['Invalid email or password'] }, status: :unauthorized
           end

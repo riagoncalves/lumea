@@ -1,7 +1,9 @@
 module Api
   module PatientRecordsService
     module Patients
-      class PatientDetails < ApplicationService
+      class PatientDetails < PatientRecordsService::Base
+        attribute :auth_token, :string
+
         attr_reader :patient
 
         def call
@@ -16,10 +18,6 @@ module Api
         end
 
         private
-
-        def auth_token
-          cookies.signed[:auth_token]
-        end
 
         def handle_response(response)
           return handle_success(response) if response.status.eql?(200)

@@ -1,12 +1,14 @@
 class ApplicationController < ActionController::Base
+  include AuthHelper
+  helper_method :current_patient, :current_doctor
+
   allow_browser versions: :modern
 
-  def current_token
-    cookies.signed[:auth_token]
+  def current_patient
+    nil
   end
 
-  def authenticated?
-    current_token.present? &&
-      current_token.expires_at > Time.current
+  def current_doctor
+    nil
   end
 end

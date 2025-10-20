@@ -6,7 +6,9 @@ module Public
   
     def create
       if service.call
-        redirect_to root_path, notice: 'Login successful.'
+        cookies.signed[:auth_token] = { value: service.auth_token, **cookie_options }
+        cookies.signed[:user_type]  = { value: service.user_type,  **cookie_options }
+        redirect_to patient_home_path, notice: 'Login successful.'
       else
         redirect_to login_path, alert: service.errors.full_messages.join('<br>')
       end
@@ -14,7 +16,8 @@ module Public
 
     def destroy
       cookies.delete(:auth_token)
-      redirect_to root_path
+      cookies.delete(:user_type)
+      redirect_to login_path
     end
 
     private
@@ -25,6 +28,10 @@ module Public
 
     def service
       @service ||= Api::UsersService::Patients::Auth::Login.new(login_params)
+    end
+
+    def cookie_options
+      { httponly: true, secure: Rails.env.production?, expires: 7.days.from_now }
     end
   end
 end

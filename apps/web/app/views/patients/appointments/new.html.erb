@@ -1,29 +1,29 @@
 <div class="min-h-screen flex items-center justify-center bg-gray-50 px-4">
   <div class="w-full max-w-md bg-white shadow-lg rounded-2xl p-6">
-    <h2 class="text-2xl font-semibold text-center mb-4">Create account</h2>
+    <h2 class="text-2xl font-semibold text-center mb-4">Create Appointment</h2>
 
-    <%= form_for(@form, as: :form, url: create_register_path, method: :post) do |f| %>
+    <%= form_for(@form, as: :form, url: patient_create_appointment_path, method: :post) do |f| %>
       <div class="space-y-4">
         <div>
-          <%= f.label :email, class: "block text-sm font-medium text-gray-700 mb-1" %>
-          <%= f.email_field :email, required: true, autofocus: true,
+          <%= f.label :doctor_id, class: "block text-sm font-medium text-gray-700 mb-1" %>
+          <%= f.select :doctor_id, @doctors.map { |doctor| [doctor.name, doctor.id] }, { prompt: "Select a doctor" },
                 class: "block w-full rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" %>
         </div>
 
         <div>
-          <%= f.label :password, class: "block text-sm font-medium text-gray-700 mb-1" %>
-          <%= f.password_field :password, required: true,
+          <%= f.label :start_time, class: "block text-sm font-medium text-gray-700 mb-1" %>
+          <%= f.datetime_select :start_time, required: true,
                 class: "block w-full rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" %>
         </div>
 
         <div>
-          <%= f.label :password_confirmation, "Confirm password", class: "block text-sm font-medium text-gray-700 mb-1" %>
-          <%= f.password_field :password_confirmation, required: true,
+          <%= f.label :end_time, class: "block text-sm font-medium text-gray-700 mb-1" %>
+          <%= f.datetime_select :end_time, required: true,
                 class: "block w-full rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" %>
         </div>
 
         <div>
-          <%= f.submit "Sign up",
+          <%= f.submit "Create Appointment",
                 class: "w-full inline-flex items-center justify-center rounded-2xl py-2 px-4 text-white font-medium bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500" %>
         </div>
       </div>

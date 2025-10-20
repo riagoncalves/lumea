@@ -2,17 +2,6 @@
   <div class="w-full max-w-md bg-white shadow-lg rounded-2xl p-6">
     <h2 class="text-2xl font-semibold text-center mb-4">Sign in</h2>
 
-    <% if @form.errors.any? %>
-      <div class="mb-4 p-3 bg-red-50 border border-red-200 rounded">
-        <p class="text-sm font-medium text-red-700">Please fix the following:</p>
-        <ul class="mt-2 list-disc list-inside text-sm text-red-600">
-          <% @form.errors.full_messages.each do |msg| %>
-            <li><%= msg %></li>
-          <% end %>
-        </ul>
-      </div>
-    <% end %>
-
     <%= form_for(@form, as: :form, url: create_login_path, method: :post) do |f| %>
       <div class="space-y-4">
         <div>

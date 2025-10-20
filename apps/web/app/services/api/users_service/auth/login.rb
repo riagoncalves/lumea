@@ -4,6 +4,8 @@ module Api
       class Login < ApplicationService
         INTERNAL_API_SECRET = ENV["APP_SECRET_KEY"]
 
+        attr_reader :auth_token, :user_type
+
         def call(
           url:,
           email:,
@@ -35,14 +37,8 @@ module Api
         end
 
         def handle_success(response)
-          auth_token = response.body["auth_token"]
-          
-          cookies.signed[:auth_token] = {
-            value: auth_token,
-            httponly: true,
-            secure: Rails.env.production?,
-            expires: 7.days.from_now
-          }
+          @auth_token = response.body["auth_token"]
+          @user_type  = response.body["type"]
         end
       end
     end

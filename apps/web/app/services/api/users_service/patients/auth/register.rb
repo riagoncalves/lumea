@@ -10,12 +10,20 @@ module Api
           def call
             url = "#{SERVICE_URL}/patients/auth/register"
 
-            register_service.call(
+            result = register_service.call(
               url:,
               email:,
               password:,
               password_confirmation:
             )
+
+            return true if result
+
+            register_service.errors.full_messages.each do |error|
+              errors.add(:base, error)
+            end
+
+            false
           end
         end
       end
