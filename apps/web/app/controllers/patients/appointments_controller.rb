@@ -23,7 +23,7 @@ module Patients
     end
 
     def new
-      @form = Appointments::CreateParams.new
+      @form = Api::AppointmentsService::Appointments::Create.new
       @doctors = []
     end
 

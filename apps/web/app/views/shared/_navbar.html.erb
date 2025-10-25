@@ -2,7 +2,8 @@
   <div class="flex items-center space-x-4">
     <% if patient? %>
       <%= link_to 'Dashboard', patient_home_path, class: 'text-blue-600 hover:text-blue-800' %>
-      <%= link_to 'My Profile', patient_profile_path, class: 'text-blue-600 hover:text-blue-800' %>
+      <%= link_to 'My Profile', '#', class: 'text-blue-600 hover:text-blue-800' %>
+      <%= link_to 'Appointments', patient_appointments_path, class: 'text-blue-600 hover:text-blue-800' %>
       <%= link_to 'Logout', logout_path, method: :delete, class: 'text-red-600 hover:text-red-800' %>
     <% elsif doctor? %>
       <%= link_to 'Dashboard', doctor_home_path, class: 'text-blue-600 hover:text-blue-800' %>

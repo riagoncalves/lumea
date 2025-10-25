@@ -9,7 +9,7 @@ module Api
         def call
           return false if auth_token.blank?
 
-          url = "#{SERVICE_URL}/patients/details"
+          url = "#{SERVICE_URL}/patients/patient_details"
           response = Faraday.get(url) do |req|
             req.headers['Authorization'] = auth_token
           end

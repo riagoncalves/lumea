@@ -1,7 +1,7 @@
 module Api
   module AppointmentsService
     module Appointments      
-      class Index < BaseService
+      class Index < Api::AppointmentsService::Base
         attr_reader :appointments
 
         def call
@@ -37,8 +37,9 @@ module Api
               end_time: appointment_data["end_time"],
               created_at: appointment_data["created_at"],
               updated_at: appointment_data["updated_at"],
-              doctor_id: appointment_data["doctor_id"], # Todo fetch doctor details
-              patient_id: appointment_data["patient_id"]
+              doctor_id: appointment_data["doctor_id"],
+              patient_id: appointment_data["patient_id"],
+              doctor: appointment_data["doctor"]
             )
           end
 

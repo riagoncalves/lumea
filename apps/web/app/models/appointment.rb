@@ -10,4 +10,5 @@ class User
   attribute :updated_at, :datetime
   attribute :doctor_id, :integer
   attribute :patient_id, :integer
+  attribute :doctor, :json
 end

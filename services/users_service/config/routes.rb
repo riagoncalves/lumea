@@ -33,9 +33,7 @@ Rails.application.routes.draw do
     end
 
     scope :external_services, module: :external_services do
-      scope :users do
-        get ':id', to: 'users#show'
-      end
+      get 'users/:id', to: 'users#show', as: :user
     end
   end
 end

@@ -1,6 +1,6 @@
 <div class="flex justify-between items-center mb-4">
   <h1 class="text-2xl font-bold text-gray-800">Appointments</h1>
-  <%= link_to 'New Appointment', '#', class: 'bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded shadow' %>
+  <%= link_to 'New Appointment', patient_new_appointment_path, class: 'bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded shadow' %>
 </div>
 
 <div class="overflow-x-auto">
@@ -11,6 +11,7 @@
         <th class="px-4 py-2 text-left text-gray-600 uppercase text-sm">Start Time</th>
         <th class="px-4 py-2 text-left text-gray-600 uppercase text-sm">End Time</th>
         <th class="px-4 py-2 text-left text-gray-600 uppercase text-sm">Status</th>
+        <th class="px-4 py-2 text-left text-gray-600 uppercase text-sm">Doctor</th>
         <th class="px-4 py-2 text-left text-gray-600 uppercase text-sm">Actions</th>
       </tr>
     </thead>
@@ -21,6 +22,7 @@
           <td class="px-4 py-2 text-gray-700"><%= appointment.start_time.strftime("%b %d, %Y %H:%M") %></td>
           <td class="px-4 py-2 text-gray-700"><%= appointment.end_time.strftime("%b %d, %Y %H:%M") %></td>
           <td class="px-4 py-2"><%= appointment.status.titleize %></td>
+          <td class="px-4 py-2 text-gray-700"><%= appointment.doctor["name"] %></td>
           <td class="px-4 py-2 space-x-2">
             <%= link_to 'View', '#', class: 'text-blue-600 hover:text-blue-800' %>
             <%= link_to 'Edit', '#', class: 'text-yellow-600 hover:text-yellow-800' %>

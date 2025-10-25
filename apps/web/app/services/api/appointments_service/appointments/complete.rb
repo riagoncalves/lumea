@@ -1,7 +1,7 @@
 module Api
   module AppointmentsService
     module Appointments
-      class Complete < BaseService
+      class Complete < Api::AppointmentsService::Base
         attribute :id, :integer
 
         def call

@@ -1,7 +1,7 @@
 module Api
   module AppointmentsService
     module Appointments
-      class Update < BaseService
+      class Update < Api::AppointmentsService::Base
         attribute :id, :integer
         attribute :doctor_id, :integer
         attribute :start_time, :datetime

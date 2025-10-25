@@ -66,6 +66,17 @@ services:
     ports:
       - "5447:5432"
 
+  doctor_details_db:
+    image: postgres:14
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: doctor_details_development
+    volumes:
+      - doctor_details_postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5448:5432"
+
   # Shared Redis instance
   redis:
     image: redis:7
@@ -179,11 +190,24 @@ services:
     ports:
       - "3007:3000"
 
+  doctor_details:
+    build:
+      context: ./services/doctor_details_service
+      dockerfile: Dockerfile.dev
+    command: bundle exec rails server -b 0.0.0.0 -p 3000
+    depends_on:
+      - users
+      - doctor_details_db
+      - redis
+    ports:
+      - "3008:3000"
+
 volumes:
   appointments_postgres_data:
   communications_postgres_data:
   log_postgres_data:
   patient_records_postgres_data:
+  doctor_details_postgres_data:
   users_postgres_data:
   video_calls_postgres_data:
   redis_data:

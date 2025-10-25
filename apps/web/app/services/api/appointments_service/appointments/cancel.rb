@@ -1,7 +1,7 @@
 module Api
   module AppointmentsService
     module Appointments
-      class Cancel < BaseService
+      class Cancel < Api::AppointmentsService::Base
         attribute :id, :integer
 
         def call

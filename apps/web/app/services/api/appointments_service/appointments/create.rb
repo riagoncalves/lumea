@@ -1,7 +1,7 @@
 module Api
   module AppointmentsService
     module Appointments
-      class Create < BaseService
+      class Create < Api::AppointmentsService::Base
         attribute :doctor_id, :integer
         attribute :start_time, :datetime
         attribute :end_time, :datetime
