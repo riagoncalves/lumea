@@ -1,7 +1,9 @@
 module Patients
   class AppointmentsController < Patients::BaseController
+    before_action :set_doctors_list, only: %i[new edit]
+
     def index
-      service = Api::AppointmentsService::Appointments::Index.new(auth_token: current_token)
+      service = Api::AppointmentsService::Appointments::List.new(auth_token: current_token)
       if service.call
         @appointments = service.appointments
       else
@@ -24,7 +26,6 @@ module Patients
 
     def new
       @form = Api::AppointmentsService::Appointments::Create.new
-      @doctors = []
     end
 
     def create
@@ -40,6 +41,7 @@ module Patients
         auth_token: current_token,
         id: params[:id]
       )
+
       if service.call
         @appointment = service.appointment
         @form = Appointments::UpdateParams.new(
@@ -48,7 +50,6 @@ module Patients
           start_time: @appointment.start_time,
           end_time: @appointment.end_time
         )
-        @doctors = []
       else
         redirect_to patient_appointments_path, alert: service.errors.full_messages.join('<br>')
       end
@@ -80,6 +81,18 @@ module Patients
     end
 
     private
+
+    def set_doctors_list
+      @doctors_list = if doctor_details_service.call
+                        doctor_details_service.doctors
+                      else
+                        []
+                      end
+    end
+
+    def doctor_details_service
+      @doctor_details_service ||= Api::DoctorDetailsService::DoctorDetails::List.new
+    end
 
     def create_appointment_service
       @create_appointment_service ||= Api::AppointmentsService::Appointments::Create.new(create_params)

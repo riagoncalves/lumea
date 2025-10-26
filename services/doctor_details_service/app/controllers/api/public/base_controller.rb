@@ -1,5 +1,5 @@
 module Api
-  module Doctors
+  module Public
     class BaseController < ApplicationController
       before_action :app_authentication!
     end

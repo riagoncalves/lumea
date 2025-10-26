@@ -1,10 +1,10 @@
 module Api
   module DoctorDetailsService
-    module DoctorsDetails
-      class Index < DoctorDetailsService::Base
+    module DoctorDetails
+      class List < Api::DoctorDetailsService::Base
         INTERNAL_API_SECRET = ENV["APP_SECRET_KEY"]
 
-        attr_reader :doctor_details
+        attr_reader :doctors
 
         def call
           return false if INTERNAL_API_SECRET.blank?
@@ -32,8 +32,8 @@ module Api
         def handle_success(response)
           doctor_details_body = response.body["doctor_details"]
 
-          @doctor_details = doctor_details_body.map do |doctor_detail|
-            User.new(
+          @doctors = doctor_details_body.map do |doctor_detail|
+            Doctor.new(
               id: doctor_detail["doctor_id"],
               full_name: doctor_detail["full_name"],
             )

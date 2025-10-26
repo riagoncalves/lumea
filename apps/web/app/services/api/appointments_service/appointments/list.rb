@@ -1,7 +1,7 @@
 module Api
   module AppointmentsService
     module Appointments      
-      class Index < Api::AppointmentsService::Base
+      class List < Api::AppointmentsService::Base
         attr_reader :appointments
 
         def call

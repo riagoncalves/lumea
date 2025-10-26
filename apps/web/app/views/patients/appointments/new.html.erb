@@ -6,7 +6,7 @@
       <div class="space-y-4">
         <div>
           <%= f.label :doctor_id, class: "block text-sm font-medium text-gray-700 mb-1" %>
-          <%= f.select :doctor_id, @doctors.map { |doctor| [doctor.name, doctor.id] }, { prompt: "Select a doctor" },
+          <%= f.select :doctor_id, @doctors_list.map { |doctor| [doctor.full_name, doctor.id] }, { prompt: "Select a doctor" },
                 class: "block w-full rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" %>
         </div>
 
