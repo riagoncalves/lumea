@@ -25,7 +25,10 @@
             <%= link_to 'View', patient_appointment_path(appointment.id), class: 'text-blue-600 hover:text-blue-800' %>
             <% if appointment.can_be_edited? %>
               <%= link_to 'Edit', patient_edit_appointment_path(appointment.id), class: 'text-yellow-600 hover:text-yellow-800' %>
-              <%= link_to 'Cancel', patient_cancel_appointment_path(appointment.id), method: :delete, data: { confirm: 'Are you sure?' }, class: 'text-red-600 hover:text-red-800' %>
+              <%= button_to 'Cancel', patient_cancel_appointment_path(appointment.id),
+                method: :delete,
+                data: { turbo_confirm: 'Are you sure?' },
+                class: 'text-red-600 hover:text-red-800 bg-transparent border-none p-0 underline cursor-pointer' %>
             <% end %>
           </td>
         </tr>
