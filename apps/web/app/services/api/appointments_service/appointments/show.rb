@@ -41,7 +41,10 @@ module Api
               updated_at: appointment_data["updated_at"],
               doctor_id: appointment_data["doctor_id"],
               patient_id: appointment_data["patient_id"],
-              doctor: appointment_data["doctor"]
+              doctor: Doctor.new(
+                id: appointment_data.dig("doctor", "doctor_id"),
+                full_name: appointment_data.dig("doctor", "full_name")
+              )
             )
 
           true

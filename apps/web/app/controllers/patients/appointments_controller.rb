@@ -44,12 +44,16 @@ module Patients
 
       if service.call
         @appointment = service.appointment
-        @form = Appointments::UpdateParams.new(
+        @form = Api::AppointmentsService::Appointments::Update.new(
           id: @appointment.id,
           doctor_id: @appointment.doctor_id,
           start_time: @appointment.start_time,
           end_time: @appointment.end_time
         )
+
+        unless @appointment.can_be_edited?
+          redirect_to patient_appointments_path, alert: 'Only pending appointments can be edited.'
+        end
       else
         redirect_to patient_appointments_path, alert: service.errors.full_messages.join('<br>')
       end
@@ -59,7 +63,7 @@ module Patients
       if update_appointment_service.call
         redirect_to patient_appointment_path(params[:id]), notice: 'Appointment updated successfully.'
       else
-        redirect_to edit_patient_appointment_path(params[:id]), alert: update_appointment_service.errors.full_messages.join('<br>')
+        redirect_to patient_edit_appointment_path(params[:id]), alert: update_appointment_service.errors.full_messages.join('<br>')
       end
     end
 

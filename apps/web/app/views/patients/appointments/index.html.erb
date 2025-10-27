@@ -7,7 +7,6 @@
   <table class="min-w-full bg-white border border-gray-200 rounded-lg">
     <thead class="bg-gray-100">
       <tr>
-        <th class="px-4 py-2 text-left text-gray-600 uppercase text-sm">ID</th>
         <th class="px-4 py-2 text-left text-gray-600 uppercase text-sm">Start Time</th>
         <th class="px-4 py-2 text-left text-gray-600 uppercase text-sm">End Time</th>
         <th class="px-4 py-2 text-left text-gray-600 uppercase text-sm">Status</th>
@@ -18,15 +17,16 @@
     <tbody class="divide-y divide-gray-200">
       <% @appointments.each do |appointment| %>
         <tr>
-          <td class="px-4 py-2 text-gray-700"><%= appointment.id %></td>
           <td class="px-4 py-2 text-gray-700"><%= appointment.start_time.strftime("%b %d, %Y %H:%M") %></td>
           <td class="px-4 py-2 text-gray-700"><%= appointment.end_time.strftime("%b %d, %Y %H:%M") %></td>
           <td class="px-4 py-2"><%= appointment.status.titleize %></td>
-          <td class="px-4 py-2 text-gray-700"><%= appointment.doctor["name"] %></td>
+          <td class="px-4 py-2 text-gray-700"><%= appointment.doctor.full_name %></td>
           <td class="px-4 py-2 space-x-2">
-            <%= link_to 'View', '#', class: 'text-blue-600 hover:text-blue-800' %>
-            <%= link_to 'Edit', '#', class: 'text-yellow-600 hover:text-yellow-800' %>
-            <%= link_to 'Delete', '#', method: :delete, data: { confirm: 'Are you sure?' }, class: 'text-red-600 hover:text-red-800' %>
+            <%= link_to 'View', patient_appointment_path(appointment.id), class: 'text-blue-600 hover:text-blue-800' %>
+            <% if appointment.can_be_edited? %>
+              <%= link_to 'Edit', patient_edit_appointment_path(appointment.id), class: 'text-yellow-600 hover:text-yellow-800' %>
+              <%= link_to 'Cancel', patient_cancel_appointment_path(appointment.id), method: :delete, data: { confirm: 'Are you sure?' }, class: 'text-red-600 hover:text-red-800' %>
+            <% end %>
           </td>
         </tr>
       <% end %>

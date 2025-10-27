@@ -1,6 +1,8 @@
-class User
+class Appointment
   include ActiveModel::Model
   include ActiveModel::Attributes
+
+  attr_accessor :doctor
 
   attribute :id, :integer
   attribute :status, :string
@@ -10,5 +12,8 @@ class User
   attribute :updated_at, :datetime
   attribute :doctor_id, :integer
   attribute :patient_id, :integer
-  attribute :doctor, :json
+
+  def can_be_edited?
+    status.eql?("pending") && start_time > Time.current
+  end
 end

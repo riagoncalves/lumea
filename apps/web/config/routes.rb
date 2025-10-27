@@ -37,10 +37,10 @@ Rails.application.routes.draw do
     get "appointments/new", to: "appointments#new", as: :new_appointment
     post "appointments", to: "appointments#create", as: :create_appointment
     get "appointments/:id", to: "appointments#show", as: :appointment
-    get "appointments/:id/edit", to: "appointments#edit", as: :edit
+    get "appointments/:id/edit", to: "appointments#edit", as: :edit_appointment
     put "appointments/:id", to: "appointments#update", as: :update_appointment
     put "appointments/:id/complete", to: "appointments#complete", as: :complete_appointment
-    delete "appointments/:id", to: "appointments#destroy", as: :cance_appointment
+    delete "appointments/:id", to: "appointments#destroy", as: :cancel_appointment
   end
 
   scope :doctors, as: :doctor, module: :doctors do

@@ -3,11 +3,11 @@ module ExternalServices
     class Show < ApplicationService
       INTERNAL_API_SECRET = ENV["APP_SECRET_KEY"]
 
+      attribute :doctor_id, :integer
+
       attr_reader :doctor
 
-      def call(
-        doctor_id:
-      )
+      def call
         response = Faraday.get(url) do |req|
           req.headers['Authorization'] = INTERNAL_API_SECRET
         end
@@ -32,9 +32,9 @@ module ExternalServices
       end
 
       def handle_success(response)
-        @doctor = response.body["doctor_detail"].map do |doctor_detail_data|
+        @doctor = response.body["doctor_detail"].tap do |doctor_detail_data|
           {
-            id: doctor_detail_data["doctor_id"],
+            id: doctor_detail_data["doctor_id"]&.to_i,
             name: doctor_detail_data["full_name"]
           }
         end
