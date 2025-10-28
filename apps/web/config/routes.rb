@@ -45,5 +45,10 @@ Rails.application.routes.draw do
 
   scope :doctors, as: :doctor, module: :doctors do
     root to: "home#index", as: :home
+
+    get "appointments", to: "appointments#index", as: :appointments
+    get "appointments/:id", to: "appointments#show", as: :appointment
+    put "appointments/:id/complete", to: "appointments#complete", as: :complete_appointment
+    delete "appointments/:id", to: "appointments#destroy", as: :cancel_appointment
   end
 end

@@ -30,8 +30,12 @@ module Api
         def handle_response(response)
           return true if response.status.eql?(201)
           
-          response.body["errors"].each do |error|
-            errors.add(:base, error)
+          if response.body["errors"].present?
+            response.body["errors"].each do |error|
+              errors.add(:base, error)
+            end
+          else
+            errors.add(:base, "Unexpected error occurred.")
           end
 
           false
