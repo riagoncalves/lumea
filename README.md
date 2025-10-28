@@ -1,4 +1,4 @@
-# Medical Appointment System
+# Lumea
 
 A comprehensive medical appointment management system built as a microservices architecture.
 
