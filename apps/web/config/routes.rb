@@ -41,6 +41,8 @@ Rails.application.routes.draw do
     put "appointments/:id", to: "appointments#update", as: :update_appointment
     put "appointments/:id/complete", to: "appointments#complete", as: :complete_appointment
     delete "appointments/:id", to: "appointments#destroy", as: :cancel_appointment
+
+    get "appointments/:id/room", to: "appointment_rooms#show", as: :appointment_room
   end
 
   scope :doctors, as: :doctor, module: :doctors do

@@ -18,4 +18,8 @@ class Appointment < ApplicationRecord
   def destroy
     update(status: :cancelled)
   end
+
+  def can_start_video_call?
+    status.eql?("pending") && (start_time - 5.minutes) <= Time.current && end_time >= Time.current
+  end
 end

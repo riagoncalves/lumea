@@ -22,6 +22,7 @@
           <td class="px-4 py-2"><%= appointment.status.titleize %></td>
           <td class="px-4 py-2 text-gray-700"><%= appointment.doctor.full_name %></td>
           <td class="px-4 py-2 space-x-2">
+            <%= link_to 'Join Room', patient_appointment_room_path(appointment.id), class: 'text-blue-600 hover:text-blue-800' if appointment.can_join_room? %>
             <%= link_to 'View', patient_appointment_path(appointment.id), class: 'text-blue-600 hover:text-blue-800' %>
             <% if appointment.can_be_edited? %>
               <%= link_to 'Edit', patient_edit_appointment_path(appointment.id), class: 'text-yellow-600 hover:text-yellow-800' %>

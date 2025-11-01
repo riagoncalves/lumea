@@ -22,7 +22,7 @@ module ExternalServices
       end
 
       def handle_response(response)
-        return handle_success(response) if response.status.eql?(200)
+        return handle_success(response) if response.success?
         
         if response.body["errors"].present?
           response.body["errors"].each do |error|

@@ -19,7 +19,7 @@ module Api
         end
 
         def handle_response(response)
-          return handle_success(response) if response.status.eql?(200)
+          return handle_success(response) if response.success?
           
           if response.body["errors"].present?
             response.body["errors"].each do |error|
@@ -46,7 +46,8 @@ module Api
               doctor: Doctor.new(
                 id: appointment_data.dig("doctor", "doctor_id"),
                 full_name: appointment_data.dig("doctor", "full_name")
-              )
+              ),
+              can_start_video_call: appointment_data["can_start_video_call"]
             )
           end
 

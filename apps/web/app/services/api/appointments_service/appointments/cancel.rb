@@ -19,7 +19,7 @@ module Api
         end
 
         def handle_response(response)
-          return true if response.status.eql?(200)
+          return true if response.success?
           
           if response.body["errors"].present?
             response.body["errors"].each do |error|

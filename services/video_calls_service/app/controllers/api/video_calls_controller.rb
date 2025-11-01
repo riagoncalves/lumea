@@ -1,42 +1,41 @@
 module Api
   class VideoCallsController < ApplicationController
-    before_action :set_video_room, only: [:show]
-
-    def create
-      service = VideoCalls::Create.new(video_call_create_params)
-      if service.call
+    def find_or_create
+      if video_room.present?
         render(status: :ok,
-              json: service.video_room,
+              json: video_room,
               serializer: ::VideoRoomSerializer,
               root: :video_room,
               adapter: :json)
       else
-        render(status: :unprocessable_entity, json: service, serializer: ::ErrorSerializer)
-      end
-    end
-
-    def show
-      if @video_room.present?
-        render(status: :ok,
-              json: @video_room,
-              serializer: ::VideoRoomSerializer,
-              root: :video_room,
-              adapter: :json)
-      else
-        render status: :not_found, json: { errors: ['Video room not found'] }
+        if create_video_room_service.call
+          render(status: :created,
+                 json: create_video_room_service.video_room,
+                 serializer: ::VideoRoomSerializer,
+                 root: :video_room,
+                 adapter: :json)
+        else
+          render status: :not_found, json: { errors: ['Video room not found'] }
+        end
       end
     end
 
     private
 
-    def video_call_create_params
-      params.require(:video_call).permit(:doctor_id, :patient_id)
+    def create_video_room_service
+      @create_video_room_service ||= VideoCalls::Create.new(video_call_params)
     end
 
-    def set_video_room
-      @video_room = VideoRoom.find_by(room_sid: params[:id])
-    rescue ActiveRecord::RecordNotFound
-      render status: :not_found, json: { errors: ['Video room not found'] }
+    def video_room
+      @video_room ||= VideoRoom.where.not(status: "room_ended").find_by(video_call_params)
+    end
+
+    def video_call_params
+      {
+        doctor_id: current_user.doctor? ? current_user.id : params[:recipient_id],
+        patient_id: current_user.patient? ? current_user.id : params[:recipient_id],
+        appointment_id: params[:appointment_id]
+      }
     end
   end
 end
