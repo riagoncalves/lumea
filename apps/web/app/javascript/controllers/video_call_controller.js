@@ -80,22 +80,6 @@ export default class extends Controller {
     console.log(`Participant disconnected: ${participant.identity}`);
   }
 
-  toggleMute(event) {
-    this.isMuted = !this.isMuted;
-    this.localTracks
-      .filter(track => track.kind === "audio")
-      .forEach(track => (track.isEnabled = !this.isMuted));
-    if (event) event.currentTarget.textContent = this.isMuted ? "Unmute" : "Mute";
-  }
-
-  toggleVideo(event) {
-    this.isVideoHidden = !this.isVideoHidden;
-    this.localTracks
-      .filter(track => track.kind === "video")
-      .forEach(track => (track.isEnabled = !this.isVideoHidden));
-    if (event) event.currentTarget.textContent = this.isVideoHidden ? "Show Video" : "Hide Video";
-  }
-
   leave() {
     if (this.room) {
       this.room.disconnect();
