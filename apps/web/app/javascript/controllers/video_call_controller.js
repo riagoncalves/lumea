@@ -2,102 +2,107 @@ import { Controller } from "@hotwired/stimulus";
 import Video from "twilio-video";
 
 export default class extends Controller {
-  static values = {
-    roomName: String,
-    accessToken: String
-  };
+  static values = { roomName: String, accessToken: String };
 
   connect() {
     this.localContainer = document.getElementById("local-video");
     this.remoteContainer = document.getElementById("remote-video");
     this.room = null;
+    this.localTracks = [];
+    this.isMuted = false;
+    this.isVideoHidden = false;
   }
 
   async join() {
     const token = this.accessTokenValue;
     const roomName = this.roomNameValue;
 
-    if (!token || !roomName) {
-      console.error("Missing Twilio token or room name.");
-      return;
-    }
+    if (!token || !roomName) return console.error("Missing Twilio token or room name.");
 
     try {
+      this.localTracks = await Video.createLocalTracks({ audio: true, video: true });
+      this.addLocalVideo();
+
       this.room = await Video.connect(token, {
         name: roomName,
-        audio: true,
-        video: true, // can still join without a camera
+        tracks: this.localTracks,
       });
 
       console.log(`Connected to room: ${this.room.name}`);
-      console.log("Local identity:", this.room.localParticipant.identity);
+      this.remoteContainer.innerHTML = "";
 
-      await this.addLocalMedia();
-      this.setupParticipants();
+      // Attach already-present participants
+      this.room.participants.forEach(p => this.attachParticipant(p));
+
+      // Listen for new participants
+      this.room.on("participantConnected", p => this.attachParticipant(p));
+      this.room.on("participantDisconnected", p => this.removeParticipant(p));
+
     } catch (err) {
       console.error("Error connecting to Twilio room:", err);
     }
   }
 
-  async addLocalMedia() {
-    try {
-      const tracks = await Video.createLocalTracks({ audio: true, video: true });
-      tracks.forEach(track => {
-        this.localContainer.appendChild(track.attach());
-      });
-    } catch (err) {
-      console.warn("Could not create local video track (maybe voice only):", err);
+  addLocalVideo() {
+    const videoTrack = this.localTracks.find(track => track.kind === "video");
+    if (videoTrack) {
+      this.localContainer.innerHTML = "";
+      this.localContainer.appendChild(videoTrack.attach());
     }
   }
 
-  setupParticipants() {
-    // Handle already-connected participants
-    this.room.participants.forEach(p => this.participantConnected(p));
-
-    // Handle future joins/disconnects
-    this.room.on("participantConnected", p => this.participantConnected(p));
-    this.room.on("participantDisconnected", p => this.participantDisconnected(p));
-  }
-
-  participantConnected(participant) {
+  attachParticipant(participant) {
     console.log(`Participant connected: ${participant.identity}`);
 
-    // Create a container for this participant
+    // Prevent duplicate container
+    if (document.getElementById(`participant-${participant.sid}`)) return;
+
     const container = document.createElement("div");
     container.id = `participant-${participant.sid}`;
-    container.classList.add("participant-container");
+    container.classList.add("w-full", "h-full", "flex", "justify-center", "items-center");
     this.remoteContainer.appendChild(container);
 
-    // Attach already published tracks
-    participant.tracks.forEach(pub => {
-      if (pub.isSubscribed) {
-        container.appendChild(pub.track.attach());
+    // Attach only subscribed tracks
+    participant.tracks.forEach(publication => {
+      if (publication.isSubscribed && publication.track) {
+        container.appendChild(publication.track.attach());
       }
     });
 
-    // Listen for future tracks
-    participant.on("trackSubscribed", track => {
-      container.appendChild(track.attach());
-    });
-
-    participant.on("trackUnsubscribed", track => {
-      track.detach().forEach(el => el.remove());
-    });
+    // Listen for future subscribed tracks
+    participant.on("trackSubscribed", track => container.appendChild(track.attach()));
+    participant.on("trackUnsubscribed", track => track.detach().forEach(el => el.remove()));
   }
 
-  participantDisconnected(participant) {
-    console.log(`Participant disconnected: ${participant.identity}`);
+  removeParticipant(participant) {
     const container = document.getElementById(`participant-${participant.sid}`);
     if (container) container.remove();
+    console.log(`Participant disconnected: ${participant.identity}`);
+  }
+
+  toggleMute(event) {
+    this.isMuted = !this.isMuted;
+    this.localTracks
+      .filter(track => track.kind === "audio")
+      .forEach(track => (track.isEnabled = !this.isMuted));
+    if (event) event.currentTarget.textContent = this.isMuted ? "Unmute" : "Mute";
+  }
+
+  toggleVideo(event) {
+    this.isVideoHidden = !this.isVideoHidden;
+    this.localTracks
+      .filter(track => track.kind === "video")
+      .forEach(track => (track.isEnabled = !this.isVideoHidden));
+    if (event) event.currentTarget.textContent = this.isVideoHidden ? "Show Video" : "Hide Video";
   }
 
   leave() {
     if (this.room) {
       this.room.disconnect();
       this.room = null;
-      console.log("Left the room");
       this.localContainer.innerHTML = "";
-      this.remoteContainer.innerHTML = "";
+      this.remoteContainer.innerHTML = "Call ended.";
+      console.log("Left the room");
     }
   }
 }
