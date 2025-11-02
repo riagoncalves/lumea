@@ -26,47 +26,69 @@ export default class extends Controller {
       this.room = await Video.connect(token, {
         name: roomName,
         audio: true,
-        video: { width: 640, height: 480 }
+        video: true, // can still join without a camera
       });
 
       console.log(`Connected to room: ${this.room.name}`);
+      console.log("Local identity:", this.room.localParticipant.identity);
 
-      await this.addLocalVideo();
+      await this.addLocalMedia();
       this.setupParticipants();
     } catch (err) {
       console.error("Error connecting to Twilio room:", err);
-    } 
+    }
   }
 
-  async addLocalVideo() {
-    const track = await Video.createLocalVideoTrack();
-    this.localContainer.innerHTML = "";
-    this.localContainer.appendChild(track.attach());
+  async addLocalMedia() {
+    try {
+      const tracks = await Video.createLocalTracks({ audio: true, video: true });
+      tracks.forEach(track => {
+        this.localContainer.appendChild(track.attach());
+      });
+    } catch (err) {
+      console.warn("Could not create local video track (maybe voice only):", err);
+    }
   }
 
   setupParticipants() {
-    this.room.participants.forEach(this.participantConnected.bind(this));
-    this.room.on("participantConnected", this.participantConnected.bind(this));
-    this.room.on("participantDisconnected", this.participantDisconnected.bind(this));
+    // Handle already-connected participants
+    this.room.participants.forEach(p => this.participantConnected(p));
+
+    // Handle future joins/disconnects
+    this.room.on("participantConnected", p => this.participantConnected(p));
+    this.room.on("participantDisconnected", p => this.participantDisconnected(p));
   }
 
   participantConnected(participant) {
     console.log(`Participant connected: ${participant.identity}`);
-    participant.tracks.forEach(publication => {
-      if (publication.isSubscribed) {
-        this.remoteContainer.appendChild(publication.track.attach());
+
+    // Create a container for this participant
+    const container = document.createElement("div");
+    container.id = `participant-${participant.sid}`;
+    container.classList.add("participant-container");
+    this.remoteContainer.appendChild(container);
+
+    // Attach already published tracks
+    participant.tracks.forEach(pub => {
+      if (pub.isSubscribed) {
+        container.appendChild(pub.track.attach());
       }
     });
+
+    // Listen for future tracks
     participant.on("trackSubscribed", track => {
-      this.remoteContainer.appendChild(track.attach());
+      container.appendChild(track.attach());
+    });
+
+    participant.on("trackUnsubscribed", track => {
+      track.detach().forEach(el => el.remove());
     });
   }
 
   participantDisconnected(participant) {
     console.log(`Participant disconnected: ${participant.identity}`);
-    participant.tracks.forEach(publication => {
-      if (publication.track) publication.track.detach().forEach(el => el.remove());
-    });
+    const container = document.getElementById(`participant-${participant.sid}`);
+    if (container) container.remove();
   }
 
   leave() {

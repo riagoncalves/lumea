@@ -23,11 +23,13 @@ module Api
     private
 
     def create_video_room_service
-      @create_video_room_service ||= VideoCalls::Create.new(video_call_params)
+      @create_video_room_service ||= VideoCalls::Create.new(
+        video_call_params.merge(current_user_id: current_user.id)
+      )
     end
 
     def video_room
-      @video_room ||= VideoRoom.where.not(status: "room_ended").find_by(video_call_params)
+      @video_room ||= VideoRoom.where.not(status: "room_ended").find_by(video_call_params)&.add_access_token(current_user.id)
     end
 
     def video_call_params

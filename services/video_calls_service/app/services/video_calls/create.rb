@@ -3,6 +3,7 @@ module VideoCalls
     attribute :doctor_id, :integer
     attribute :patient_id, :integer
     attribute :appointment_id, :integer
+    attribute :current_user_id, :integer
 
     attr_reader :video_room
 
@@ -34,21 +35,9 @@ module VideoCalls
         vr.doctor_id = doctor_id
         vr.patient_id = patient_id
         vr.appointment_id = appointment_id
-        vr.access_token = generate_video_token(patient_id, twilio_room.unique_name)
       end
-    end
 
-    def generate_video_token(identity, unique_name)
-      token = Twilio::JWT::AccessToken.new(
-        ENV['TWILIO_ACCOUNT_SID'],
-        ENV['TWILIO_API_KEY_SID'],
-        ENV['TWILIO_API_KEY_SECRET'],
-        identity: identity.to_s
-      )
-      grant = Twilio::JWT::AccessToken::VideoGrant.new
-      grant.room = unique_name
-      token.add_grant(grant)
-      token.to_jwt
+      @video_room.add_access_token(current_user_id)
     end
   end
 end

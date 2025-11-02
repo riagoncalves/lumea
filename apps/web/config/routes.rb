@@ -52,5 +52,7 @@ Rails.application.routes.draw do
     get "appointments/:id", to: "appointments#show", as: :appointment
     put "appointments/:id/complete", to: "appointments#complete", as: :complete_appointment
     delete "appointments/:id", to: "appointments#destroy", as: :cancel_appointment
+
+    get "appointments/:id/room", to: "appointment_rooms#show", as: :appointment_room
   end
 end

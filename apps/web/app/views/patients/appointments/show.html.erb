@@ -4,7 +4,7 @@
     <div class="space-x-2">
       <%= link_to 'Back', patient_appointments_path, class: 'bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold px-4 py-2 rounded' %>
       <% if @appointment.can_be_edited? %>
-      <%= link_to 'Join Room', patient_appointment_room_path(@appointment.id), class: 'text-blue-600 hover:text-blue-800' if @appointment.can_join_room? %>
+      <%= link_to 'Join Room', patient_appointment_room_path(@appointment.id), class: 'bg-green-200 hover:bg-green-300 text-white font-semibold px-4 py-2 rounded' if @appointment.can_join_room? %>
         <%= link_to 'Edit', patient_edit_appointment_path(@appointment.id), class: 'bg-yellow-500 hover:bg-yellow-600 text-white font-semibold px-4 py-2 rounded' %>
         <%= button_to 'Cancel', patient_cancel_appointment_path(@appointment.id),
                 method: :delete,

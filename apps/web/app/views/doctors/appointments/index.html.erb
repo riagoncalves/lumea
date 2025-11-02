@@ -21,6 +21,7 @@
           <td class="px-4 py-2"><%= appointment.status.titleize %></td>
           <td class="px-4 py-2 text-gray-700"></td>
           <td class="px-4 py-2 space-x-2">
+            <%= link_to 'Join Room', doctor_appointment_room_path(appointment.id), class: 'text-blue-600 hover:text-blue-800' if appointment.can_join_room? %>
             <%= link_to 'View', doctor_appointment_path(appointment.id), class: 'text-blue-600 hover:text-blue-800' %>
             <% if appointment.can_be_edited? %>
               <%= button_to 'Cancel', doctor_cancel_appointment_path(appointment.id),
