@@ -5,7 +5,11 @@ module Patients
     def authenticate_patient!
       return if patient? && current_patient.present?
 
-      redirect_to login_path, alert: 'You must be logged in to access this section.'
+      if doctor?
+        redirect_to doctor_home_path
+      else
+        redirect_to login_path, alert: 'You must be logged in to access this section.'
+      end
     end
 
     def current_patient

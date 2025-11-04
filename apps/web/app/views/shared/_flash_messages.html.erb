@@ -1,9 +1,15 @@
 <% flash.each do |key, value| %>
   <% next if key.blank? %>
 
-  <div class="overflow-hidden top-20 left-0 fixed w-full z-40" data-controller="flash">
-    <p data-flash-target="message" class="bg-<%= flash_color(key) %>-500 text-white text-center p-4 text-lg border-solid border-white w-full transition-transform ease-in-out duration-300">
+  <div
+    class="fixed top-5 left-1/2 z-40 w-full max-w-lg -translate-x-1/2 px-4 sm:px-0"
+    data-controller="flash"
+  >
+    <div
+      data-flash-target="message"
+      class="flex items-center justify-center rounded-xl shadow-lg bg-<%= flash_color(key) %>-500 text-white text-center py-3 px-5 text-base sm:text-lg font-medium transition-transform ease-in-out duration-500"
+    >
       <%= value.html_safe %>
-    </p>
+    </div>
   </div>
 <% end %>
