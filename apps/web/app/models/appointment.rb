@@ -2,7 +2,7 @@ class Appointment
   include ActiveModel::Model
   include ActiveModel::Attributes
 
-  attr_accessor :doctor
+  attr_accessor :doctor, :patient
 
   attribute :id, :integer
   attribute :status, :string

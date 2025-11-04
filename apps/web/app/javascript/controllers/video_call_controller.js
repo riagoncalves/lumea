@@ -9,8 +9,6 @@ export default class extends Controller {
     this.remoteContainer = document.getElementById("remote-video");
     this.room = null;
     this.localTracks = [];
-    this.isMuted = false;
-    this.isVideoHidden = false;
   }
 
   async join() {

@@ -39,5 +39,9 @@ Rails.application.routes.draw do
       post 'session_notes/:id/create', to: 'session_notes#create', as: :create_session_note
       put 'session_notes/:id/:session_note_id/update', to: 'session_notes#update', as: :update_session_note
     end
+
+    scope :services, as: :services, module: :services do
+      get 'patient_details/:patient_id', to: 'patient_details#show', as: :patient_details
+    end
   end
 end

@@ -49,6 +49,10 @@ module Api
                 id: appointment_data.dig("doctor", "doctor_id"),
                 full_name: appointment_data.dig("doctor", "full_name")
               ),
+              patient: Patient.new(
+                id: appointment_data.dig("patient", "patient_id"),
+                full_name: appointment_data.dig("patient", "full_name")
+              ),
               can_start_video_call: appointment_data["can_start_video_call"]
             )
 

@@ -8,7 +8,7 @@
   <!-- Patient Info -->
   <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
     <h2 class="text-lg font-semibold text-gray-800 mb-2">Patient Information</h2>
-    <p><span class="font-medium text-gray-600">Name:</span> <%= "N/A" %></p>
+    <p><span class="font-medium text-gray-600">Name:</span> <%= @appointment.patient&.full_name %></p>
   </div>
 
   <!-- Video Call Section -->
