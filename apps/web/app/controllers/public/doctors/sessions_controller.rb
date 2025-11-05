@@ -1,6 +1,8 @@
 module Public
   module Doctors
     class SessionsController < Public::BaseController
+      skip_before_action :authenticated_redirect, only: %i[destroy]
+
       def new
         @form = Api::UsersService::Doctors::Auth::Login.new
       end
