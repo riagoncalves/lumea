@@ -1,38 +1,45 @@
-<div class="max-w-4xl mx-auto bg-white shadow rounded-lg p-6">
-  <div class="flex justify-between items-center mb-6">
-    <h1 class="text-2xl font-bold text-gray-800">Appointment Details</h1>
-    <div class="space-x-2">
-      <%= link_to 'Back', doctor_appointments_path, class: 'bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold px-4 py-2 rounded' %>
-      <%= link_to 'Join Room', doctor_appointment_room_path(@appointment.id), class: 'bg-green-200 hover:bg-green-300 text-white font-semibold px-4 py-2 rounded' if @appointment.can_join_room? %>
+<div class="max-w-4xl mx-auto bg-white rounded-xl shadow-sm border border-gray-100 p-8">
+  <div class="flex justify-between items-center mb-8">
+    <h1 class="text-3xl font-semibold text-gray-900">Appointment Details</h1>
+    <div class="flex gap-3">
+      <%= link_to 'Back', doctor_appointments_path,
+        class: 'px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium rounded-lg transition-colors duration-200' %>
+
+      <% if @appointment.can_join_room? %>
+        <%= link_to 'Join Room', doctor_appointment_room_path(@appointment.id),
+          class: 'px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white font-medium rounded-lg transition-colors duration-200' %>
+      <% end %>
+
       <% if @appointment.can_be_edited? %>
         <%= button_to 'Cancel', doctor_cancel_appointment_path(@appointment.id),
-                method: :delete,
-                data: { turbo_confirm: 'Are you sure?' },
-                class: 'text-red-600 hover:text-red-800 bg-transparent border-none p-0 underline cursor-pointer' %>
+          method: :delete,
+          data: { turbo_confirm: 'Are you sure?' },
+          class: 'px-4 py-2 bg-red-500 hover:bg-red-600 text-white font-medium rounded-lg transition-colors duration-200' %>
       <% end %>
     </div>
   </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-    <div>
-      <h2 class="text-lg font-semibold text-gray-700 mb-2">General Information</h2>
-      <div class="space-y-2">
-        <p><span class="font-medium text-gray-600">Appointment ID:</span> <%= @appointment.id %></p>
-        <p><span class="font-medium text-gray-600">Status:</span> 
-          <span class="<%= @appointment.status == 'completed' ? 'text-green-600' : @appointment.status == 'cancelled' ? 'text-red-600' : 'text-yellow-600' %> font-semibold">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <div class="bg-gray-50 rounded-lg p-5 border border-gray-100">
+      <h2 class="text-lg font-semibold text-gray-800 mb-3">General Information</h2>
+      <ul class="space-y-2 text-gray-700">
+        <li><span class="font-medium text-gray-600">Appointment ID:</span> <%= @appointment.id %></li>
+        <li>
+          <span class="font-medium text-gray-600">Status:</span>
+          <span class="<%= @appointment.status == 'completed' ? 'text-emerald-600' : @appointment.status == 'cancelled' ? 'text-red-600' : 'text-amber-600' %> font-semibold">
             <%= @appointment.status.titleize %>
           </span>
-        </p>
-        <p><span class="font-medium text-gray-600">Start Time:</span> <%= @appointment.start_time.strftime("%b %d, %Y %H:%M") %></p>
-        <p><span class="font-medium text-gray-600">End Time:</span> <%= @appointment.end_time.strftime("%b %d, %Y %H:%M") %></p>
-      </div>
+        </li>
+        <li><span class="font-medium text-gray-600">Start Time:</span> <%= @appointment.start_time.strftime("%b %d, %Y %H:%M") %></li>
+        <li><span class="font-medium text-gray-600">End Time:</span> <%= @appointment.end_time.strftime("%b %d, %Y %H:%M") %></li>
+      </ul>
     </div>
 
-    <div>
-      <h2 class="text-lg font-semibold text-gray-700 mb-2">Patient Information</h2>
-      <div class="space-y-2">
-        <p><span class="font-medium text-gray-600">Name:</span> <%= @appointment.patient&.full_name %></p>
-      </div>
+    <div class="bg-gray-50 rounded-lg p-5 border border-gray-100">
+      <h2 class="text-lg font-semibold text-gray-800 mb-3">Patient Information</h2>
+      <ul class="space-y-2 text-gray-700">
+        <li><span class="font-medium text-gray-600">Name:</span> <%= @appointment.patient&.full_name %></li>
+      </ul>
     </div>
   </div>
 </div>

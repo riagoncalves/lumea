@@ -1,39 +1,61 @@
-<div class="flex justify-between items-center mb-4">
-  <h1 class="text-2xl font-bold text-gray-800">Appointments</h1>
-  <%= link_to 'New Appointment', patient_new_appointment_path, class: 'bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded shadow' %>
-</div>
+<div class="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 px-6 py-10">
+  <div class="max-w-6xl mx-auto bg-white/80 backdrop-blur-sm shadow-xl rounded-2xl border border-gray-100 p-8">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+      <h1 class="text-3xl font-semibold text-gray-800">Appointments</h1>
+      <%= link_to 'New Appointment',
+                  patient_new_appointment_path,
+                  class: 'inline-flex items-center justify-center rounded-xl bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-semibold px-5 py-2.5 shadow-sm transition-all duration-200' %>
+    </div>
 
-<div class="overflow-x-auto">
-  <table class="min-w-full bg-white border border-gray-200 rounded-lg">
-    <thead class="bg-gray-100">
-      <tr>
-        <th class="px-4 py-2 text-left text-gray-600 uppercase text-sm">Start Time</th>
-        <th class="px-4 py-2 text-left text-gray-600 uppercase text-sm">End Time</th>
-        <th class="px-4 py-2 text-left text-gray-600 uppercase text-sm">Status</th>
-        <th class="px-4 py-2 text-left text-gray-600 uppercase text-sm">Doctor</th>
-        <th class="px-4 py-2 text-left text-gray-600 uppercase text-sm">Actions</th>
-      </tr>
-    </thead>
-    <tbody class="divide-y divide-gray-200">
-      <% @appointments.each do |appointment| %>
-        <tr>
-          <td class="px-4 py-2 text-gray-700"><%= appointment.start_time.strftime("%b %d, %Y %H:%M") %></td>
-          <td class="px-4 py-2 text-gray-700"><%= appointment.end_time.strftime("%b %d, %Y %H:%M") %></td>
-          <td class="px-4 py-2"><%= appointment.status.titleize %></td>
-          <td class="px-4 py-2 text-gray-700"><%= appointment.doctor.full_name %></td>
-          <td class="px-4 py-2 space-x-2">
-            <%= link_to 'Join Room', patient_appointment_room_path(appointment.id), class: 'text-blue-600 hover:text-blue-800' if appointment.can_join_room? %>
-            <%= link_to 'View', patient_appointment_path(appointment.id), class: 'text-blue-600 hover:text-blue-800' %>
-            <% if appointment.can_be_edited? %>
-              <%= link_to 'Edit', patient_edit_appointment_path(appointment.id), class: 'text-yellow-600 hover:text-yellow-800' %>
-              <%= button_to 'Cancel', patient_cancel_appointment_path(appointment.id),
-                method: :delete,
-                data: { turbo_confirm: 'Are you sure?' },
-                class: 'text-red-600 hover:text-red-800 bg-transparent border-none p-0 underline cursor-pointer' %>
-            <% end %>
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
+    <div class="overflow-x-auto rounded-xl border border-gray-200 shadow-sm">
+      <table class="min-w-full text-sm text-left text-gray-700">
+        <thead class="bg-gray-100 text-gray-600 uppercase text-xs font-semibold tracking-wide">
+          <tr>
+            <th class="px-5 py-3">Start Time</th>
+            <th class="px-5 py-3">End Time</th>
+            <th class="px-5 py-3">Status</th>
+            <th class="px-5 py-3">Doctor</th>
+            <th class="px-5 py-3">Actions</th>
+          </tr>
+        </thead>
+
+        <tbody class="divide-y divide-gray-200 bg-white">
+          <% @appointments.each do |appointment| %>
+            <tr class="hover:bg-gray-50 transition-colors duration-150">
+              <td class="px-5 py-3 whitespace-nowrap"><%= appointment.start_time.strftime("%b %d, %Y %H:%M") %></td>
+              <td class="px-5 py-3 whitespace-nowrap"><%= appointment.end_time.strftime("%b %d, %Y %H:%M") %></td>
+              <td class="px-5 py-3">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
+                              <%= case appointment.status
+                                  when 'completed' then 'bg-green-100 text-green-800'
+                                  when 'cancelled' then 'bg-red-100 text-red-800'
+                                  when 'pending' then 'bg-yellow-100 text-yellow-800'
+                                  else 'bg-gray-100 text-gray-800'
+                                  end %>">
+                  <%= appointment.status.titleize %>
+                </span>
+              </td>
+              <td class="px-5 py-3"><%= appointment.doctor.full_name %></td>
+              <td class="px-5 py-3 space-x-3">
+                <% if appointment.can_join_room? %>
+                  <%= link_to 'Join Room', patient_appointment_room_path(appointment.id),
+                      class: 'text-indigo-600 hover:text-indigo-800 font-medium transition-colors' %>
+                <% end %>
+                <%= link_to 'View', patient_appointment_path(appointment.id),
+                    class: 'text-blue-600 hover:text-blue-800 font-medium transition-colors' %>
+                <% if appointment.can_be_edited? %>
+                  <%= link_to 'Edit', patient_edit_appointment_path(appointment.id),
+                      class: 'text-yellow-600 hover:text-yellow-800 font-medium transition-colors' %>
+                  <%= button_to 'Cancel', patient_cancel_appointment_path(appointment.id),
+                      method: :delete,
+                      data: { turbo_confirm: 'Are you sure?' },
+                      class: 'text-red-600 hover:text-red-800 font-medium underline cursor-pointer bg-transparent border-none p-0' %>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
