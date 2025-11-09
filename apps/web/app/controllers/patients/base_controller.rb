@@ -23,7 +23,7 @@ module Patients
     private
 
     def patient_details_service
-      @patient_details_service ||= Api::PatientRecordsService::Patients::PatientDetails.new(auth_token: current_token)
+      @patient_details_service ||= Api::PatientRecordsService::Patients::PatientDetails::Show.new(auth_token: current_token)
     end
   end
 end

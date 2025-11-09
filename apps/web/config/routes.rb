@@ -13,6 +13,8 @@ Rails.application.routes.draw do
   # root "posts#index"
   
   scope module: :public do
+    root to: "home#index", as: :public_home
+
     get "register", to: "registrations#new", as: :register
     post "register", to: "registrations#create", as: :create_register
 
@@ -33,6 +35,10 @@ Rails.application.routes.draw do
   scope :patients, as: :patient, module: :patients do
     root to: "home#index", as: :home
 
+    get "profile", to: "profile#show", as: :profile
+    get "profile/edit", to: "profile#edit", as: :edit_profile
+    put "profile/profile", to: "profile#update", as: :update_profile
+
     get "appointments", to: "appointments#index", as: :appointments
     get "appointments/new", to: "appointments#new", as: :new_appointment
     post "appointments", to: "appointments#create", as: :create_appointment
@@ -47,6 +53,9 @@ Rails.application.routes.draw do
 
   scope :doctors, as: :doctor, module: :doctors do
     root to: "home#index", as: :home
+
+    get "patients", to: "patients#index", as: :patients
+    get "patients/:id", to: "patients#show", as: :patient
 
     get "appointments", to: "appointments#index", as: :appointments
     get "appointments/:id", to: "appointments#show", as: :appointment

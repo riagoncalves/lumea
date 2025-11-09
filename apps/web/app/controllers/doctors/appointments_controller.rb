@@ -38,5 +38,21 @@ module Doctors
         redirect_to doctor_appointments_path, alert: cancel_appointment_service.errors.full_messages.join('<br>')
       end
     end
+
+    private
+
+    def complete_appointment_service
+      @complete_appointment_service ||= Api::AppointmentsService::Appointments::Complete.new(
+        auth_token: current_token,
+        id: params[:id]
+      )
+    end
+
+    def cancel_appointment_service
+      @cancel_appointment_service ||= Api::AppointmentsService::Appointments::Cancel.new(
+        auth_token: current_token,
+        id: params[:id]
+      )
+    end
   end
 end

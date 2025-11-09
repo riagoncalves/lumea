@@ -114,9 +114,9 @@ module Api
 
     def appointments
       @appointments ||= if current_user.doctor?
-        Appointment.where(doctor_id: current_user.id)
+        Appointment.where(doctor_id: current_user.id).order(start_time: :desc)
       else
-        Appointment.where(patient_id: current_user.id)
+        Appointment.where(patient_id: current_user.id).order(start_time: :desc)
       end
     end
   end

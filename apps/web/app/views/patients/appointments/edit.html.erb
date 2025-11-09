@@ -1,32 +1,48 @@
-<div class="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-  <div class="w-full max-w-md bg-white shadow-lg rounded-2xl p-6">
-    <h2 class="text-2xl font-semibold text-center mb-4">Update Appointment</h2>
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-50 to-gray-100 px-4 py-10">
+  <div class="w-full max-w-md bg-white/80 backdrop-blur-sm border border-gray-100 shadow-xl rounded-2xl p-8">
+    <h2 class="text-3xl font-semibold text-center text-gray-800 mb-6">Update Appointment</h2>
 
     <%= form_for(@form, as: :form, url: patient_update_appointment_path(@form.id), method: :put) do |f| %>
-      <div class="space-y-4">
+      <div class="space-y-5">
         <div>
-          <%= f.label :doctor_id, class: "block text-sm font-medium text-gray-700 mb-1" %>
-          <%= f.select :doctor_id, @doctors_list.map { |doctor| [doctor.full_name, doctor.id] }, { prompt: "Select a doctor" },
-                class: "block w-full rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500", value: @form.doctor_id %>
+          <%= f.label :doctor_id, "Select Doctor", class: "block text-sm font-medium text-gray-700 mb-2" %>
+          <%= f.select :doctor_id,
+                @doctors_list.map { |doctor| [doctor.full_name, doctor.id] },
+                { prompt: "Choose a doctor" },
+                { class: "block w-full rounded-xl border border-gray-300 px-4 py-2.5 placeholder-gray-400 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200",
+                  value: @form.doctor_id } %>
         </div>
 
         <div>
-          <%= f.label :start_time, class: "block text-sm font-medium text-gray-700 mb-1" %>
-          <%= f.datetime_local_field :start_time, required: true, min: Time.current, max: 1.year.from_now, value: @form.start_time,
-                class: "block w-full rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" %>
+          <%= f.label :start_time, "Start Time", class: "block text-sm font-medium text-gray-700 mb-2" %>
+          <%= f.datetime_local_field :start_time,
+                required: true,
+                min: Time.current,
+                max: 1.year.from_now,
+                value: @form.start_time,
+                class: "block w-full rounded-xl border border-gray-300 px-4 py-2.5 placeholder-gray-400 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200" %>
         </div>
 
         <div>
-          <%= f.label :end_time, class: "block text-sm font-medium text-gray-700 mb-1" %>
-          <%= f.datetime_local_field :end_time, required: true, min: Time.current, max: 1.year.from_now, value: @form.end_time,
-                class: "block w-full rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" %>
+          <%= f.label :end_time, "End Time", class: "block text-sm font-medium text-gray-700 mb-2" %>
+          <%= f.datetime_local_field :end_time,
+                required: true,
+                min: Time.current,
+                max: 1.year.from_now,
+                value: @form.end_time,
+                class: "block w-full rounded-xl border border-gray-300 px-4 py-2.5 placeholder-gray-400 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200" %>
         </div>
 
-        <div>
+        <div class="pt-4">
           <%= f.submit "Update Appointment",
-                class: "w-full inline-flex items-center justify-center rounded-2xl py-2 px-4 text-white font-medium bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500" %>
+                class: "w-full inline-flex items-center justify-center rounded-xl py-2.5 px-4 text-white font-semibold bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-1 transition-all duration-200 shadow-sm" %>
         </div>
       </div>
     <% end %>
+
+    <div class="mt-6 text-center">
+      <%= link_to "← Back to Appointments", patient_appointments_path,
+          class: "text-sm font-medium text-gray-600 hover:text-indigo-600 transition-colors duration-200" %>
+    </div>
   </div>
 </div>

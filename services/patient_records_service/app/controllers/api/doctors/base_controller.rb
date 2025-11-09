@@ -19,6 +19,10 @@ module Api
       rescue StandardError => e
         render(status: :internal_server_error, json: { errors: [e.message] })
       end
+
+      def auth_token
+        request.headers['Authorization']
+      end
     end
   end
 end

@@ -5,13 +5,14 @@
         <% if patient? || doctor? %>
           <% if patient? %>
             <%= link_to 'Dashboard', patient_home_path, class: 'text-gray-700 font-medium hover:text-blue-600 transition-colors duration-200' %>
-            <%= link_to 'My Profile', '#', class: 'text-gray-700 font-medium hover:text-blue-600 transition-colors duration-200' %>
+            <%= link_to 'My Profile', patient_profile_path, class: 'text-gray-700 font-medium hover:text-blue-600 transition-colors duration-200' %>
             <%= link_to 'Appointments', patient_appointments_path, class: 'text-gray-700 font-medium hover:text-blue-600 transition-colors duration-200' %>
             <%= button_to 'Logout', logout_path,
                         method: :delete,
                         class: 'text-red-600 font-medium hover:text-red-700 transition-colors duration-200' %>
           <% elsif doctor? %>
             <%= link_to 'Dashboard', doctor_home_path, class: 'text-gray-700 font-medium hover:text-blue-600 transition-colors duration-200' %>
+            <%= link_to 'Patients', doctor_patients_path, class: 'text-gray-700 font-medium hover:text-blue-600 transition-colors duration-200' %>
             <%= link_to 'Appointments', doctor_appointments_path, class: 'text-gray-700 font-medium hover:text-blue-600 transition-colors duration-200' %>
             <%= button_to 'Logout', doctor_logout_path,
                         method: :delete,

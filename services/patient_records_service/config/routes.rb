@@ -21,6 +21,7 @@ Rails.application.routes.draw do
     end
 
     scope :doctors, as: :doctor, module: :doctors do
+      get 'patient_details', to: 'patient_details#index', as: :patient_details_index
       get 'patient_details/:id', to: 'patient_details#show', as: :patient_details
       put 'patient_details/:id/update', to: 'patient_details#update', as: :update_patient_details
 

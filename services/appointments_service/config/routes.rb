@@ -17,5 +17,9 @@ Rails.application.routes.draw do
       put ":id/complete", to: "appointments#complete", as: :complete_appointment
       delete ":id/cancel", to: "appointments#destroy", as: :delete_appointment
     end
+
+    scope :doctors, as: :doctors, module: :doctors do
+      get "patients", to: "patients#index", as: :patients
+    end
   end
 end

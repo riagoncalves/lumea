@@ -3,6 +3,19 @@ module Api
     class PatientDetailsController < BaseController
       before_action :set_patient, only: [:show, :update]
 
+      def index
+        if patient_ids_service.call
+          patient_details = PatientDetail.where(patient_id: patient_ids_service.patient_ids)
+          render(status: :ok,
+                 json: patient_details,
+                 each_serializer: ::PatientDetailsMinimalSerializer,
+                 root: :patient_details,
+                 adapter: :json)
+        else
+          render(status: :unauthorized, json: { errors: patient_ids_service.errors.full_messages })
+        end
+      end
+
       def show
         if @patient.present?
           render(status: :ok,
@@ -41,6 +54,10 @@ module Api
   
       def patient_detail_params
         params.require(:patient_detail).permit(:full_name, :gender, :date_of_birth, :contact_number, :address)
+      end
+
+      def patient_ids_service
+        @patient_ids_service ||= ExternalServices::AppointmentsService::PatientIds.new(auth_token:)
       end
     end
   end
