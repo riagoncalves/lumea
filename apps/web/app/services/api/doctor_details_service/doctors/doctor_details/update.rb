@@ -2,27 +2,42 @@ module Api
   module DoctorDetailsService
     module Doctors
       module DoctorDetails
-        class Show < Api::DoctorDetailsService::Base
+        class Update < DoctorDetailsService::Base
           attribute :auth_token, :string
-  
-          attr_reader :doctor
+          attribute :full_name, :string
+          attribute :gender, :string
+          attribute :date_of_birth, :date
+          attribute :contact_number, :string
+          attribute :address, :string
   
           def call
             return false if auth_token.blank?
   
-            url = "#{SERVICE_URL}/doctors/doctor_details"
-            response = Faraday.get(url) do |req|
+            response = Faraday.put(url) do |req|
               req.headers['Authorization'] = auth_token
+              req.body = {
+                doctor_detail: {
+                  full_name:,
+                  gender:,
+                  date_of_birth:,
+                  contact_number:,
+                  address:
+                }
+              }
             end
   
             handle_response(response)
           end
   
           private
+
+          def url
+            "#{SERVICE_URL}/doctors/doctor_details/update"
+          end
   
           def handle_response(response)
             return handle_success(response) if response.success?
-
+            
             if response.body["errors"].present?
               response.body["errors"].each do |error|
                 errors.add(:base, error)
@@ -35,17 +50,6 @@ module Api
           end
   
           def handle_success(response)
-            doctor_detail_body = response.body["doctor_detail"]
-
-            @doctor = Doctor.new(
-              id: doctor_detail_body["doctor_id"],
-              full_name: doctor_detail_body["full_name"],
-              gender: doctor_detail_body["gender"],
-              date_of_birth: doctor_detail_body["date_of_birth"],
-              contact_number: doctor_detail_body["contact_number"],
-              address: doctor_detail_body["address"]
-            )
-  
             true
           end
         end

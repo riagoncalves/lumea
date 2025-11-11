@@ -1,0 +1,39 @@
+<div class="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 py-10 px-4">
+  <div class="max-w-3xl mx-auto bg-white/80 backdrop-blur-sm border border-gray-100 shadow-xl rounded-2xl p-8 space-y-8">
+    <div class="flex justify-between items-center">
+      <h1 class="text-3xl font-semibold text-gray-900">My Profile</h1>
+      <%= link_to 'Edit Profile',
+          doctor_edit_profile_path,
+          class: 'bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-4 py-2 rounded-xl transition-all duration-200 shadow-sm' %>
+    </div>
+
+    <div class="bg-gray-50/80 p-6 rounded-xl border border-gray-200 shadow-sm space-y-4">
+      <div>
+        <p class="text-sm font-medium text-gray-500 uppercase">Full Name</p>
+        <p class="text-gray-800 text-lg font-semibold"><%= @profile.full_name %></p>
+      </div>
+
+      <div>
+        <p class="text-sm font-medium text-gray-500 uppercase">Gender</p>
+        <p class="text-gray-800 text-lg font-semibold"><%= @profile.gender.capitalize if @profile.gender.present? %></p>
+      </div>
+
+      <div>
+        <p class="text-sm font-medium text-gray-500 uppercase">Date of Birth</p>
+        <p class="text-gray-800 text-lg font-semibold">
+          <%= @profile.date_of_birth.strftime("%b %d, %Y") if @profile.date_of_birth.present? %>
+        </p>
+      </div>
+
+      <div>
+        <p class="text-sm font-medium text-gray-500 uppercase">Contact Number</p>
+        <p class="text-gray-800 text-lg font-semibold"><%= @profile.contact_number %></p>
+      </div>
+
+      <div>
+        <p class="text-sm font-medium text-gray-500 uppercase">Address</p>
+        <p class="text-gray-800 text-lg font-semibold whitespace-pre-line"><%= @profile.address %></p>
+      </div>
+    </div>
+  </div>
+</div>

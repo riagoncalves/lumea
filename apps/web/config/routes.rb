@@ -54,6 +54,10 @@ Rails.application.routes.draw do
   scope :doctors, as: :doctor, module: :doctors do
     root to: "home#index", as: :home
 
+    get "profile", to: "profile#show", as: :profile
+    get "profile/edit", to: "profile#edit", as: :edit_profile
+    put "profile/profile", to: "profile#update", as: :update_profile
+
     get "patients", to: "patients#index", as: :patients
     get "patients/:id", to: "patients#show", as: :patient
 
