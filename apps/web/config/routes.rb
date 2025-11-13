@@ -11,4 +11,61 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+  
+  scope module: :public do
+    root to: "home#index", as: :public_home
+
+    get "register", to: "registrations#new", as: :register
+    post "register", to: "registrations#create", as: :create_register
+
+    get "login", to: "sessions#new", as: :login
+    post "login", to: "sessions#create", as: :create_login
+    delete "logout", to: "sessions#destroy", as: :logout
+
+    scope :doctors, as: :doctor, module: :doctors do
+      get "register", to: "registrations#new", as: :register
+      post "register", to: "registrations#create", as: :create_register
+
+      get "login", to: "sessions#new", as: :login
+      post "login", to: "sessions#create", as: :create_login
+      delete "logout", to: "sessions#destroy", as: :logout
+    end
+  end
+
+  scope :patients, as: :patient, module: :patients do
+    root to: "home#index", as: :home
+
+    get "profile", to: "profile#show", as: :profile
+    get "profile/edit", to: "profile#edit", as: :edit_profile
+    put "profile/profile", to: "profile#update", as: :update_profile
+
+    get "appointments", to: "appointments#index", as: :appointments
+    get "appointments/new", to: "appointments#new", as: :new_appointment
+    post "appointments", to: "appointments#create", as: :create_appointment
+    get "appointments/:id", to: "appointments#show", as: :appointment
+    get "appointments/:id/edit", to: "appointments#edit", as: :edit_appointment
+    put "appointments/:id", to: "appointments#update", as: :update_appointment
+    put "appointments/:id/complete", to: "appointments#complete", as: :complete_appointment
+    delete "appointments/:id", to: "appointments#destroy", as: :cancel_appointment
+
+    get "appointments/:id/room", to: "appointment_rooms#show", as: :appointment_room
+  end
+
+  scope :doctors, as: :doctor, module: :doctors do
+    root to: "home#index", as: :home
+
+    get "profile", to: "profile#show", as: :profile
+    get "profile/edit", to: "profile#edit", as: :edit_profile
+    put "profile/profile", to: "profile#update", as: :update_profile
+
+    get "patients", to: "patients#index", as: :patients
+    get "patients/:id", to: "patients#show", as: :patient
+
+    get "appointments", to: "appointments#index", as: :appointments
+    get "appointments/:id", to: "appointments#show", as: :appointment
+    put "appointments/:id/complete", to: "appointments#complete", as: :complete_appointment
+    delete "appointments/:id", to: "appointments#destroy", as: :cancel_appointment
+
+    get "appointments/:id/room", to: "appointment_rooms#show", as: :appointment_room
+  end
 end

@@ -11,7 +11,7 @@ module Auth
                       presence: { message: "Email can't be blank" }
     validates :password, presence: true, length: { minimum: 6 }
     validates :password_confirmation, presence: true
-    validates :type, presence: true, inclusion: { in: %w[Patient Doctor] }
+    validates :type, presence: true, inclusion: { in: %w[patient doctor] }
 
     validate :validate_unique_email
     validate :validate_passwords_match
@@ -19,7 +19,7 @@ module Auth
     def call
       return false unless valid?
 
-      type.constantize.create(email: email, password: password)
+      type.titleize.constantize.create(email: email, password: password)
     end
 
     private

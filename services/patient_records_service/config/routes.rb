@@ -21,6 +21,7 @@ Rails.application.routes.draw do
     end
 
     scope :doctors, as: :doctor, module: :doctors do
+      get 'patient_details', to: 'patient_details#index', as: :patient_details_index
       get 'patient_details/:id', to: 'patient_details#show', as: :patient_details
       put 'patient_details/:id/update', to: 'patient_details#update', as: :update_patient_details
 
@@ -38,6 +39,10 @@ Rails.application.routes.draw do
       get 'session_notes/:id/:session_note_id', to: 'session_notes#show', as: :session_note
       post 'session_notes/:id/create', to: 'session_notes#create', as: :create_session_note
       put 'session_notes/:id/:session_note_id/update', to: 'session_notes#update', as: :update_session_note
+    end
+
+    scope :services, as: :services, module: :services do
+      get 'patient_details/:patient_id', to: 'patient_details#show', as: :patient_details
     end
   end
 end

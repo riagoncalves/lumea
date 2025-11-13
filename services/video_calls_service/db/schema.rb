@@ -10,18 +10,29 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_18_230549) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_02_160938) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "video_room_access_tokens", force: :cascade do |t|
+    t.bigint "video_room_id", null: false
+    t.string "access_token", null: false
+    t.bigint "identity_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["video_room_id"], name: "index_video_room_access_tokens_on_video_room_id"
+  end
 
   create_table "video_rooms", force: :cascade do |t|
     t.string "name"
     t.string "room_sid"
     t.string "status"
-    t.string "access_token"
     t.bigint "doctor_id", null: false
     t.bigint "patient_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "appointment_id", null: false
   end
+
+  add_foreign_key "video_room_access_tokens", "video_rooms"
 end

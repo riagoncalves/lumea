@@ -4,5 +4,8 @@
 
 import { application } from "./application"
 
-import HelloController from "./hello_controller"
-application.register("hello", HelloController)
+import FlashController from "./flash_controller"
+application.register("flash", FlashController)
+
+import VideoCallController from "./video_call_controller"
+application.register("video-call", VideoCallController)

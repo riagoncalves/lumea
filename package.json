@@ -1,5 +1,5 @@
 {
-  "name": "thesis",
+  "name": "lumea",
   "version": "1.0.0",
   "description": "Medical appointment management system",
   "scripts": {
@@ -13,6 +13,7 @@
     "db:reset": "pnpm -r exec bundle exec rails db:reset",
     "db:seed": "pnpm -r exec bundle exec rails db:seed",
     "docker:up": "docker compose up",
+    "docker:up:build": "docker compose up --build",
     "docker:down": "docker compose down",
     "docker:build": "docker compose build --parallel --no-cache"
   },

@@ -1,8 +1,5 @@
 module Api
   class AppointmentsController < ApplicationController
-    skip_before_action :authenticate_user!, only: [:show]
-    before_action :app_authentication!, only: [:show]
-
     def index
       render(status: :ok,
               json: appointments,
@@ -12,13 +9,15 @@ module Api
     end
 
     def show
-      render(status: :ok,
-              json: appointment,
-              serializer: ::AppointmentSerializer,
-              root: :appointment,
-              adapter: :json)
-    rescue ActiveRecord::RecordNotFound
-      render(status: :not_found, json: { errors: ['Appointment not found'] })
+      if appointment.present?
+        render(status: :ok,
+               json: appointment,
+               serializer: ::AppointmentSerializer,
+               root: :appointment,
+               adapter: :json)
+      else
+        render(status: :not_found, json: { errors: ['Appointment not found'] })
+      end
     end
 
     def create
@@ -92,7 +91,11 @@ module Api
     end
 
     def appointment
-      @appointment ||= Appointment.find(params[:id])
+      @appointment ||= if current_user.doctor?
+        Appointment.find_by(id: params[:id], doctor_id: current_user.id)
+      else
+        Appointment.find_by(id: params[:id], patient_id: current_user.id)
+      end
     end
 
     def protected_appointment
@@ -111,9 +114,9 @@ module Api
 
     def appointments
       @appointments ||= if current_user.doctor?
-        Appointment.where(doctor_id: current_user.id)
+        Appointment.where(doctor_id: current_user.id).order(start_time: :desc)
       else
-        Appointment.where(patient_id: current_user.id)
+        Appointment.where(patient_id: current_user.id).order(start_time: :desc)
       end
     end
   end

@@ -1,0 +1,15 @@
+<% flash.each do |key, value| %>
+  <% next if key.blank? %>
+
+  <div
+    class="fixed top-5 left-1/2 z-40 w-full max-w-lg -translate-x-1/2 px-4 sm:px-0"
+    data-controller="flash"
+  >
+    <div
+      data-flash-target="message"
+      class="flex items-center justify-center rounded-xl shadow-lg bg-<%= flash_color(key) %>-500 text-white text-center py-3 px-5 text-base sm:text-lg font-medium transition-transform ease-in-out duration-500"
+    >
+      <%= value.html_safe %>
+    </div>
+  </div>
+<% end %>

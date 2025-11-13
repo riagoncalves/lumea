@@ -1,0 +1,52 @@
+<div class="min-h-screen flex items-center justify-center px-4 py-8">
+  <div class="w-full max-w-lg bg-white/80 backdrop-blur-sm shadow-xl rounded-2xl p-8 border border-gray-100">
+    <h2 class="text-3xl font-semibold text-center text-gray-800 mb-6">Update Profile</h2>
+
+    <%= form_for(@profile, as: :form, url: doctor_update_profile_path, method: :put) do |f| %>
+      <div class="space-y-5">
+        <div>
+          <%= f.label :full_name, "Full Name", class: "block text-sm font-medium text-gray-700 mb-2" %>
+          <%= f.text_field :full_name, required: true, value: @profile.full_name,
+                class: "block w-full rounded-xl border border-gray-300 px-4 py-2.5 placeholder-gray-400 
+                       focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200" %>
+        </div>
+
+        <div>
+          <%= f.label :gender, "Gender", class: "block text-sm font-medium text-gray-700 mb-2" %>
+          <%= f.select :gender, [["Male", "male"], ["Female", "female"], ["Other", "other"]],
+                { prompt: "Select your gender", selected: @profile.gender },
+                class: "block w-full rounded-xl border border-gray-300 px-4 py-2.5 placeholder-gray-400 
+                        focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200" %>
+        </div>
+
+        <div>
+          <%= f.label :date_of_birth, "Date of Birth", class: "block text-sm font-medium text-gray-700 mb-2" %>
+          <%= f.date_field :date_of_birth, required: true, value: @profile.date_of_birth,
+                class: "block w-full rounded-xl border border-gray-300 px-4 py-2.5 placeholder-gray-400 
+                       focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200" %>
+        </div>
+
+        <div>
+          <%= f.label :contact_number, "Contact Number", class: "block text-sm font-medium text-gray-700 mb-2" %>
+          <%= f.telephone_field :contact_number, required: true, value: @profile.contact_number,
+                class: "block w-full rounded-xl border border-gray-300 px-4 py-2.5 placeholder-gray-400 
+                       focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200" %>
+        </div>
+
+        <div>
+          <%= f.label :address, "Address", class: "block text-sm font-medium text-gray-700 mb-2" %>
+          <%= f.text_area :address, rows: 3, required: true, value: @profile.address,
+                class: "block w-full rounded-xl border border-gray-300 px-4 py-2.5 placeholder-gray-400 
+                       focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 resize-none" %>
+        </div>
+
+        <div class="pt-2">
+          <%= f.submit "Save Changes",
+                class: "w-full inline-flex items-center justify-center rounded-xl py-2.5 px-4 text-white font-semibold 
+                       bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 focus:outline-none focus:ring-2 
+                       focus:ring-indigo-500 focus:ring-offset-1 transition-all duration-200 shadow-sm" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,1 @@
+class AuthenticateTokenError < StandardError; end
