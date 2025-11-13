@@ -8,7 +8,10 @@
     "prepare": "bundle i",
     "dev": "foreman start -f Procfile.dev",
     "build": "esbuild app/javascript/*.* --bundle --sourcemap --format=esm --outdir=app/assets/builds --public-path=/assets",
-    "build:css": "npx @tailwindcss/cli -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.css --minify"
+    "build:css": "npx @tailwindcss/cli -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.css --minify",
+    "db:create": "echo 'No database to create for web app'",
+    "db:migrate": "echo 'No database to migrate for web app'",
+    "db:seed": "echo 'No database to seed for web app'"
   },
   "dependencies": {
     "@hotwired/stimulus": "^3.2.2",

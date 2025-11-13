@@ -10,6 +10,10 @@ A comprehensive medical appointment management system built as a microservices a
 - **patient_records_service**: Manages patient medical records and documents
 - **users_service**: Handles user authentication, authorization, and profile management
 - **video_calls_service**: Facilitates telemedicine video consultations
+- **doctor_details_service**: Manages doctor profiles and specialties
+
+## Apps
+- **web**: Frontend web application for patients and doctors
 
 ## Tech Stack
 
@@ -23,12 +27,13 @@ A comprehensive medical appointment management system built as a microservices a
 ## Database Architecture
 
 Each service has its own dedicated PostgreSQL container for complete data isolation:
-- **appointments_service**: localhost:5432 → appointments_development
-- **communications_service**: localhost:5433 → communications_development  
-- **log_service**: localhost:5434 → log_development
-- **patient_records_service**: localhost:5435 → patient_records_development
-- **users_service**: localhost:5436 → users_development
-- **video_calls_service**: localhost:5437 → video_calls_development
+- **appointments_service**: appointments_development
+- **communications_service**: communications_development  
+- **log_service**: log_development
+- **patient_records_service**: patient_records_development
+- **users_service**: users_development
+- **video_calls_service**: video_calls_development
+- **doctor_details_service**: doctor_details_development
 
 This architecture ensures:
 - Complete data isolation between services
@@ -38,13 +43,13 @@ This architecture ensures:
 
 ## Development Setup
 
-### Prerequisites
+### Prerequisites to run without Docker
 
 - Ruby 3.2.2
 - Node.js 18+
-- Docker and Docker Compose (recommended)
-- PostgreSQL 14+ (if not using Docker)
-- Redis (if not using Docker)
+- Docker and Docker Compose
+- PostgreSQL 14+
+- Redis
 - PNPM
 
 ### Installation
@@ -53,18 +58,13 @@ This architecture ensures:
 
 1. Clone the repository:
    ```
-   git clone https://github.com/yourusername/thesis-monorepo.git
-   cd thesis-monorepo
+   git clone git@github.com:riagoncalves/lumea.git
+   cd lumea
    ```
 
-2. Build the services with Docker Compose:
+2. Build and start the services with Docker Compose:
    ```
-   pnpm docker:build
-   ```
-
-3. Start the services with Docker Compose:
-   ```
-   pnpm docker:up
+   pnpm docker:up:build
    ```
 
 ### Quick Docker Commands
@@ -76,6 +76,9 @@ pnpm docker:build
 # Start all services
 pnpm docker:up
 
+# Build and start all services
+pnpm docker:up:build
+
 # Stop all services
 pnpm docker:down
 ```
@@ -84,13 +87,14 @@ pnpm docker:down
 
 1. Clone the repository:
    ```
-   git clone https://github.com/yourusername/thesis-monorepo.git
-   cd thesis-monorepo
+   git clone git@github.com:riagoncalves/lumea.git
+   cd lumea
    ```
 
 2. Install dependencies:
    ```
    pnpm install
+   pnpm prepare
    ```
 
 3. Setup databases:
@@ -152,4 +156,4 @@ This monorepo is organized as a collection of microservices that communicate thr
 
 ## License
 
-MIT
+[MIT](LICENSE)

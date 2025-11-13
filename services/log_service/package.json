@@ -4,7 +4,10 @@
   "description": "",
   "scripts": {
     "prepare": "bundle i",
-    "dev": "foreman start -f Procfile.dev"
+    "dev": "foreman start -f Procfile.dev",
+    "db:create": "bundle exec rake db:create",
+    "db:migrate": "bundle exec rake db:migrate",
+    "db:seed": "bundle exec rake db:seed"
   },
   "keywords": []
 }
