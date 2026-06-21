@@ -18,7 +18,7 @@ module ExternalServices
       private
 
       def url
-        "#{ENV['DOCTOR_DETAILS_SERVICE_URL']}/public/doctor_details/#{doctor_id}"
+        "#{ENV['DOCTOR_DETAILS_SERVICE_URL']}/api/public/doctor_details/#{doctor_id}"
       end
 
       def handle_response(response)

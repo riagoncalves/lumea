@@ -10,7 +10,7 @@ module ExternalServices
     attr_accessor :user_id, :action, :entity_type, :entity_id, :old_values, :new_values
 
     def create_audit_log!
-      uri = URI("#{LOG_SERVICE_URL}/audit_logs")
+      uri = URI("#{LOG_SERVICE_URL}/api/audit_logs")
       req = Net::HTTP::Post.new(uri)
       req['Authorization'] = INTERNAL_API_SECRET
       req['Content-Type'] = 'application/json'
