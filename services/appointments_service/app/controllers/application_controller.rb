@@ -14,16 +14,9 @@ class ApplicationController < ActionController::API
     token = request.headers['Authorization']
     raise ::AuthenticateTokenError, 'Unauthorized' if token.blank?
 
-    decoded_token = decode_auth_token(token)
-    raise ::AuthenticateTokenError, 'Unauthorized' if decoded_token.blank?
-
-    user_id = decoded_token['user_id']
-
-    ::ExternalServices::UsersService.get_user(user_id).tap do |user|
+    ::ExternalServices::UsersService.get_current_user(token).tap do |user|
       raise ::AuthenticateTokenError, 'Unauthorized' unless user.present?
       @current_user = user
-    rescue UserNotFound
-      raise ::AuthenticateTokenError, 'Unauthorized'
     rescue Unauthorized
       raise ::AuthenticateTokenError, 'Unauthorized'
     rescue StandardError
@@ -46,20 +39,6 @@ class ApplicationController < ActionController::API
 
   def app_secret_key
     ENV.fetch('APP_SECRET_KEY', nil)
-  end
-
-  def decode_auth_token(token)
-    decoded_token = JWT.decode(
-      token,
-      ENV.fetch('JWT_SECRET_KEY', nil),
-      true
-    )
-
-    decoded_token[0]
-  rescue JWT::ExpiredSignature
-    nil
-  rescue JWT::DecodeError
-    nil
   end
 
   def current_user
