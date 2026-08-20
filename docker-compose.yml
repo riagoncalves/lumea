@@ -11,6 +11,12 @@ services:
       - appointments_postgres_data:/var/lib/postgresql/data
     ports:
       - "5442:5432"
+    networks:
+      default:
+        # DNS-safe alias: Ruby's URI parser rejects underscores in hostnames
+        # when parsing DATABASE_URL, so app services connect via this alias.
+        aliases:
+          - appointmentsdb
 
   communications_db:
     image: postgres:14
@@ -23,6 +29,10 @@ services:
       - communications_postgres_data:/var/lib/postgresql/data
     ports:
       - "5443:5432"
+    networks:
+      default:
+        aliases:
+          - communicationsdb
 
   log_db:
     image: postgres:14
@@ -35,6 +45,10 @@ services:
       - log_postgres_data:/var/lib/postgresql/data
     ports:
       - "5444:5432"
+    networks:
+      default:
+        aliases:
+          - logdb
 
   patient_records_db:
     image: postgres:14
@@ -47,6 +61,10 @@ services:
       - patient_records_postgres_data:/var/lib/postgresql/data
     ports:
       - "5445:5432"
+    networks:
+      default:
+        aliases:
+          - patientrecordsdb
 
   users_db:
     image: postgres:14
@@ -59,6 +77,10 @@ services:
       - users_postgres_data:/var/lib/postgresql/data
     ports:
       - "5446:5432"
+    networks:
+      default:
+        aliases:
+          - usersdb
 
   video_calls_db:
     image: postgres:14
@@ -71,6 +93,10 @@ services:
       - video_calls_postgres_data:/var/lib/postgresql/data
     ports:
       - "5447:5432"
+    networks:
+      default:
+        aliases:
+          - videocallsdb
 
   doctor_details_db:
     image: postgres:14
@@ -83,6 +109,10 @@ services:
       - doctor_details_postgres_data:/var/lib/postgresql/data
     ports:
       - "5448:5432"
+    networks:
+      default:
+        aliases:
+          - doctordetailsdb
 
   # Shared Redis instance
   redis:
