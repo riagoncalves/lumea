@@ -8,7 +8,7 @@ module Appointments
     def call
       return false unless valid?
 
-      appointment.save
+      with_doctor_slot_lock { appointment.save }
     end
 
     def appointment

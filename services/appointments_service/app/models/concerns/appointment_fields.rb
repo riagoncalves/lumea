@@ -71,4 +71,38 @@ module AppointmentFields
       end_time, start_time
     )
   end
+
+  # Serializes concurrent booking attempts for the same doctor (and the same patient)
+  # around a fresh, unmemoized re-check of slot availability, so the check and the
+  # write happen atomically instead of racing against a concurrent request that
+  # passed its own check a moment earlier.
+  def with_doctor_slot_lock
+    result = nil
+
+    Appointment.transaction do
+      lock_doctor_slot!
+      lock_patient_slot!
+
+      if colliding_query(:doctor_id, doctor_id).exists? || colliding_query(:patient_id, patient_id).exists?
+        errors.add(:start_time, 'This time slot was just booked by someone else')
+        raise ActiveRecord::Rollback
+      end
+
+      result = yield
+    end
+
+    result || false
+  end
+
+  def lock_doctor_slot!
+    Appointment.connection.execute(
+      Appointment.sanitize_sql(['SELECT pg_advisory_xact_lock(1, ?)', doctor_id])
+    )
+  end
+
+  def lock_patient_slot!
+    Appointment.connection.execute(
+      Appointment.sanitize_sql(['SELECT pg_advisory_xact_lock(2, ?)', patient_id])
+    )
+  end
 end
