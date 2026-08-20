@@ -19,10 +19,9 @@ module Loggable
   end
 
   def create_audit_log(action)
-    AuditLog.create!(
+    AuditLogJob.perform_async(
       user_id: whodunnit,
       action: action,
-      changes: previous_changes,
       old_values: old_values,
       new_values: attributes,
       entity_type: self.class.name,
