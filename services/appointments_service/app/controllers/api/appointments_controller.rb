@@ -1,11 +1,15 @@
 module Api
   class AppointmentsController < ApplicationController
     def index
+      prefetch = ExternalServices::PrefetchAppointmentDetails.new(appointments).call
+
       render(status: :ok,
               json: appointments,
               each_serializer: ::AppointmentSerializer,
               root: :appointments,
-              adapter: :json)
+              adapter: :json,
+              doctor_details_by_id: prefetch.doctor_details_by_id,
+              patient_details_by_id: prefetch.patient_details_by_id)
     end
 
     def show

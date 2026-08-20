@@ -12,7 +12,7 @@ module ExternalServices
       req = Net::HTTP::Get.new(uri)
       req['Authorization'] = token
 
-      res = Net::HTTP.start(uri.hostname, uri.port) { |http| http.request(req) }
+      res = Net::HTTP.start(uri.hostname, uri.port, open_timeout: 2, read_timeout: 5) { |http| http.request(req) }
 
       case res.code.to_i
       when 200
@@ -29,7 +29,7 @@ module ExternalServices
       req = Net::HTTP::Get.new(uri)
       req['Authorization'] = INTERNAL_API_SECRET
 
-      res = Net::HTTP.start(uri.hostname, uri.port) { |http| http.request(req) }
+      res = Net::HTTP.start(uri.hostname, uri.port, open_timeout: 2, read_timeout: 5) { |http| http.request(req) }
 
       case res.code.to_i
       when 200

@@ -55,10 +55,6 @@ module Api
       def patient_detail_params
         params.require(:patient_detail).permit(:full_name, :gender, :date_of_birth, :contact_number, :address)
       end
-
-      def patient_ids_service
-        @patient_ids_service ||= ExternalServices::AppointmentsService::PatientIds.new(auth_token:)
-      end
     end
   end
 end

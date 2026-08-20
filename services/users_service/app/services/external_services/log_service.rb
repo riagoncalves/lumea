@@ -25,7 +25,7 @@ module ExternalServices
         }
       }.to_json
 
-      res = Net::HTTP.start(uri.hostname, uri.port) { |http| http.request(req) }
+      res = Net::HTTP.start(uri.hostname, uri.port, open_timeout: 2, read_timeout: 5) { |http| http.request(req) }
 
       case res.code.to_i
       when 201

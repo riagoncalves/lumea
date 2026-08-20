@@ -8,6 +8,8 @@ module ExternalServices
       def call
         response = Faraday.get(url) do |req|
           req.headers['Authorization'] = auth_token
+          req.options.open_timeout = 2
+          req.options.timeout = 5
         end
 
         handle_response(response)

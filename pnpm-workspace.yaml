@@ -1,3 +1,7 @@
 packages:
   - 'services/*'
   - 'apps/*'
+allowBuilds:
+  '@parcel/watcher': true
+  '@tailwindcss/oxide': true
+  esbuild: true
