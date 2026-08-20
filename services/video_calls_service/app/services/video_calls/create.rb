@@ -8,14 +8,22 @@ module VideoCalls
     attr_reader :video_room
 
     def call
+      unless ::ExternalServices::AppointmentsService.can_start_video_call?(appointment_id)
+        errors.add(:appointment_id, 'is not currently joinable')
+        return false
+      end
+
       twilio_room = find_or_create_room
       find_or_create_video_room(twilio_room)
     end
 
     private
 
+    # Keyed on the appointment itself, not the doctor/patient pair, so a later,
+    # unrelated appointment between the same two people never finds and rejoins
+    # a stale room (or a stale cached access token) from a previous appointment.
     def room_name
-      @room_name ||= "doctor_#{doctor_id}_patient_#{patient_id}"
+      @room_name ||= "appointment_#{appointment_id}"
     end
 
     def find_or_create_room

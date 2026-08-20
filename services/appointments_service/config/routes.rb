@@ -21,5 +21,9 @@ Rails.application.routes.draw do
     scope :doctors, as: :doctors, module: :doctors do
       get "patients", to: "patients#index", as: :patients
     end
+
+    scope :public, as: :public, module: :public do
+      get "appointments/:id", to: "appointments#show", as: :appointment
+    end
   end
 end
