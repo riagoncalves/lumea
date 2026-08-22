@@ -157,8 +157,6 @@ services:
     depends_on:
       - appointments_db
       - redis
-    ports:
-      - "3001:3000"
 
   communications:
     build:
@@ -169,8 +167,6 @@ services:
     depends_on:
       - communications_db
       - redis
-    ports:
-      - "3002:3000"
 
   log:
     build:
@@ -181,8 +177,6 @@ services:
     depends_on:
       - log_db
       - redis
-    ports:
-      - "3003:3000"
 
   patient_records:
     build:
@@ -194,8 +188,6 @@ services:
       - users
       - patient_records_db
       - redis
-    ports:
-      - "3004:3000"
 
   users:
     build:
@@ -206,8 +198,6 @@ services:
     depends_on:
       - users_db
       - redis
-    ports:
-      - "3005:3000"
 
   video_calls:
     build:
@@ -218,8 +208,6 @@ services:
     depends_on:
       - video_calls_db
       - redis
-    ports:
-      - "3006:3000"
 
   web:
     build:
@@ -247,8 +235,6 @@ services:
       - users
       - doctor_details_db
       - redis
-    ports:
-      - "3008:3000"
 
 volumes:
   appointments_postgres_data:
