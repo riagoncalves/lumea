@@ -223,7 +223,7 @@ services:
       - users
       - video_calls
     ports:
-      - "3007:3000"
+      - "3000:3000"
 
   doctor_details:
     build:
