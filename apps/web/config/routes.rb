@@ -11,7 +11,9 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
-  
+
+  post "webhooks/twilio", to: "webhooks/twilio#create", as: :twilio_webhook
+
   scope module: :public do
     root to: "home#index", as: :public_home
 
