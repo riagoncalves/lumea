@@ -2,6 +2,7 @@ module Api
   class TwilioController < ApplicationController
     skip_before_action :authenticate_user!, only: [:webhook]
     skip_before_action :set_log_attributes, only: [:webhook]
+    before_action :app_authentication!, only: [:webhook]
 
     def webhook
       event   = params[:StatusCallbackEvent]
