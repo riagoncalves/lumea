@@ -1,6 +1,6 @@
-class AuditLogJob
-  include Sidekiq::Job
-  sidekiq_options queue: 'audit_logging', retry: 5, backtrace: true
+class AuditLogJob < ApplicationJob
+  queue_as :audit_logging
+  retry_on StandardError, wait: :polynomially_longer, attempts: 5
 
   def perform(user_id:, action:, entity_type:, entity_id:, old_values:, new_values:)
     ExternalServices::LogService.new(

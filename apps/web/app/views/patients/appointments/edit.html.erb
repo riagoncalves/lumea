@@ -17,6 +17,7 @@
           <%= f.label :start_time, "Start Time", class: "block text-sm font-medium text-gray-700 mb-2" %>
           <%= f.datetime_local_field :start_time,
                 required: true,
+                include_seconds: false,
                 min: Time.current,
                 max: 1.year.from_now,
                 value: @form.start_time,
@@ -27,6 +28,7 @@
           <%= f.label :end_time, "End Time", class: "block text-sm font-medium text-gray-700 mb-2" %>
           <%= f.datetime_local_field :end_time,
                 required: true,
+                include_seconds: false,
                 min: Time.current,
                 max: 1.year.from_now,
                 value: @form.end_time,

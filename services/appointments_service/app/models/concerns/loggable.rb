@@ -19,7 +19,7 @@ module Loggable
   end
 
   def create_audit_log(action)
-    AuditLogJob.perform_async(
+    AuditLogJob.perform_later(
       user_id: whodunnit,
       action: action,
       old_values: old_values,
